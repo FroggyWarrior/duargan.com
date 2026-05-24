@@ -1,0 +1,50 @@
+services:
+  web:
+    build: .
+    ports:
+      - "${APACHE_PORT:-80}:80"
+    volumes:
+      - ./src:/var/www/html
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - READER_DB_USER=${READER_DB_USER}
+      - READER_DB_PASSWORD=${READER_DB_PASSWORD}
+      - WRITER_DB_USER=${WRITER_DB_USER}
+      - WRITER_DB_PASSWORD=${WRITER_DB_PASSWORD}
+      - DB_USER=${READER_DB_USER}
+      - DB_PASSWORD=${READER_DB_PASSWORD}
+      - UPLOAD_MAX_FILESIZE=20M
+      - POST_MAX_SIZE=20M
+      - MAX_EXECUTION_TIME=300
+      - MEMORY_LIMIT=256M
+
+  db:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "${PHPMYADMIN_PORT:-8080}:80"
+    environment:
+      - PMA_HOST=db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - db
+
+volumes: {}

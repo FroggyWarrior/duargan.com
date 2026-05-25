@@ -4,16 +4,30 @@ namespace App\Models;
 use App\Core\Database;
 use PDO;
 
+/**
+ * Model for public song retrieval.
+ */
 class SongModel {
+    /**
+     * @var PDO Database connection instance.
+     */
     protected $db;
 
+    /**
+     * Constructor for SongModel.
+     * Initializes the standard database connection.
+     */
     public function __construct() {
-        // Get our single database connection
         $this->db = Database::getInstance()->getConnection();
     }
 
+    /**
+     * Fetches the latest songs categorized as 'official' releases.
+     * Includes associated platform data for each song.
+     * 
+     * @return array List of official release songs with platform data.
+     */
     public function getOfficialReleases() {
-        // 1. Fetch the songs
         $stmt = $this->db->query("
             SELECT s.*, st.name as type_name 
             FROM songs s 
@@ -23,7 +37,6 @@ class SongModel {
         ");
         $releases = $stmt->fetchAll();
 
-        // 2. Fetch platforms for each song (directly from your original code!)
         foreach ($releases as &$release) {
             $platform_stmt = $this->db->prepare("
                 SELECT p.*, sp.track_url 
@@ -35,13 +48,15 @@ class SongModel {
             $platform_stmt->execute([$release['id']]);
             $release['platforms_data'] = $platform_stmt->fetchAll();
         }
-        unset($release); // Break the reference
+        unset($release);
 
         return $releases;
     }
 
     /**
      * Fetches all songs with their associated genres and types for the Music page.
+     * 
+     * @return array List of all songs with genres and platform data.
      */
     public function getAllMusic() {
         $stmt = $this->db->query("
@@ -60,7 +75,6 @@ class SongModel {
         ");
         $tracks = $stmt->fetchAll();
 
-        // Fetch platforms for each track
         foreach ($tracks as &$track) {
             $platform_stmt = $this->db->prepare("
                 SELECT p.*, sp.track_url 
@@ -77,9 +91,11 @@ class SongModel {
 
     /**
      * Fetches a single song by ID with its type, genres, and platforms.
+     * 
+     * @param int $id The song ID.
+     * @return array|null The song data with details or null if not found.
      */
     public function getSongById($id) {
-        // 1. Fetch main song info
         $stmt = $this->db->prepare("
             SELECT s.*, st.name as type_name, st.slug as type_slug
             FROM songs s 
@@ -91,7 +107,6 @@ class SongModel {
 
         if (!$song) return null;
 
-        // 2. Fetch genres for this song
         $genre_stmt = $this->db->prepare("
             SELECT g.name, g.slug 
             FROM song_genres sg 
@@ -102,7 +117,6 @@ class SongModel {
         $genre_stmt->execute([$id]);
         $song['genres'] = $genre_stmt->fetchAll();
 
-        // 3. Fetch platforms for this song
         $platform_stmt = $this->db->prepare("
             SELECT p.*, sp.track_url 
             FROM song_platforms sp 
@@ -118,6 +132,10 @@ class SongModel {
 
     /**
      * Fetches other songs (excluding the current one) for the "More Music" section.
+     * 
+     * @param int $excludeId The ID of the current song to exclude.
+     * @param int $limit Number of songs to return.
+     * @return array List of basic song information.
      */
     public function getOtherSongs($excludeId, $limit = 4) {
         $stmt = $this->db->prepare("
@@ -127,7 +145,6 @@ class SongModel {
             ORDER BY release_date DESC 
             LIMIT ?
         ");
-        // We use bindValue for the limit because it must be an integer
         $stmt->bindValue(1, $excludeId, \PDO::PARAM_INT);
         $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
         $stmt->execute();
@@ -135,8 +152,14 @@ class SongModel {
         return $stmt->fetchAll();
     }
 
+    /**
+     * Fetches other songs excluding the current one, including detailed genre and platform data.
+     * 
+     * @param int $excludeId The ID of the current song to exclude.
+     * @param int $limit Number of songs to return.
+     * @return array List of songs with full details.
+     */
     public function getOtherSongsDetailed($excludeId, $limit = 4) {
-        // 1. Get songs by its type
         $stmt = $this->db->prepare("
             SELECT s.*, st.name as type_name, st.slug as type_slug
             FROM songs s
@@ -150,9 +173,7 @@ class SongModel {
         $stmt->execute();
         $songs = $stmt->fetchAll();
 
-        // 2. For each song, get genres and platforms
         foreach ($songs as &$song) {
-            // Genres
             $genreStmt = $this->db->prepare("
                 SELECT g.name, g.slug
                 FROM song_genres sg
@@ -163,7 +184,6 @@ class SongModel {
             $genreStmt->execute([$song['id']]);
             $song['genres'] = $genreStmt->fetchAll();
 
-            // Platforms
             $platformStmt = $this->db->prepare("
                 SELECT p.*, sp.track_url
                 FROM song_platforms sp
@@ -179,10 +199,20 @@ class SongModel {
         return $songs;
     }
 
+    /**
+     * Retrieves all active genres for navigation or filtering.
+     * 
+     * @return array List of active genres.
+     */
     public function getAllGenres() {
         return $this->db->query("SELECT * FROM genres WHERE is_active = TRUE ORDER BY name")->fetchAll();
     }
 
+    /**
+     * Retrieves all active song types for navigation or filtering.
+     * 
+     * @return array List of active song types.
+     */
     public function getAllTypes() {
         return $this->db->query("SELECT * FROM song_types WHERE is_active = TRUE ORDER BY name")->fetchAll();
     }

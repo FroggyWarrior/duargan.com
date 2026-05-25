@@ -3,8 +3,16 @@ namespace App\Controllers\Admin;
 
 use App\Core\Controller;
 
+/**
+ * BaseAdminController provides common functionality for all admin-panel controllers.
+ * It handles authentication checks and CSRF token validation for admin routes.
+ */
 class BaseAdminController extends Controller
 {
+    /**
+     * Constructor for BaseAdminController.
+     * Checks if the admin is logged in and validates CSRF token for POST requests.
+     */
     public function __construct()
     {
         if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -15,7 +23,7 @@ class BaseAdminController extends Controller
             }
         }
 
-        // Ensure CSRF token is available for admin views
+        // Ensure CSRF token is initialized for admin views
         if (empty($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }

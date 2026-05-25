@@ -7,7 +7,7 @@ namespace App\Core;
 class ViewHelper {
     /**
      * Generates HTML for social media icons securely.
-     * * @param array $platforms Array of social media data from the database
+     * @param array $platforms Array of social media data from the database
      * @param string $class CSS class for the container
      * @return string Generated HTML string
      */

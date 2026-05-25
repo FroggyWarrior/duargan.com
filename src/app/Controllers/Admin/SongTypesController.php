@@ -3,23 +3,47 @@ namespace App\Controllers\Admin;
 
 use App\Models\SongTypeModel;
 
+/**
+ * Handles administrative operations for managing song types.
+ */
 class SongTypesController extends BaseAdminController {
+    /**
+     * @var SongTypeModel The SongTypeModel instance for database operations.
+     */
     private $typeModel;
 
+    /**
+     * Constructor for SongTypesController.
+     * Initializes the SongTypeModel with admin privileges.
+     */
     public function __construct() {
         parent::__construct();
         $this->typeModel = new SongTypeModel(true);
     }
 
+    /**
+     * Displays a list of all song types, including their usage count.
+     * @return void
+     */
     public function index() {
         $types = $this->typeModel->getAllWithUsage();
         $this->render('admin/song_types/index', ['types' => $types]);
     }
 
+    /**
+     * Displays the form for creating a new song type.
+     * @return void
+     */
     public function create() {
         $this->render('admin/song_types/form', ['isEdit' => false, 'type' => null]);
     }
 
+    /**
+     * Processes the submission of the new song type creation form.
+     * Validates input, generates a slug if not provided, and attempts to save the song type.
+     * Handles duplicate entry errors.
+     * @return void
+     */
     public function store() {
         $name = trim($_POST['name'] ?? '');
         $slug = trim($_POST['slug'] ?? '');
@@ -43,6 +67,12 @@ class SongTypesController extends BaseAdminController {
         $this->redirect('/admin/song-types');
     }
 
+    /**
+     * Displays the form for editing an existing song type.
+     * Redirects to the song type list if the type is not found.
+     * @param int $id The ID of the song type to edit.
+     * @return void
+     */
     public function edit($id) {
         $type = $this->typeModel->getById($id);
         if (!$type) {
@@ -52,6 +82,13 @@ class SongTypesController extends BaseAdminController {
         $this->render('admin/song_types/form', ['isEdit' => true, 'type' => $type]);
     }
 
+    /**
+     * Processes the submission of the song type update form.
+     * Validates input and attempts to update the song type's name and slug.
+     * Handles duplicate entry errors.
+     * @param int $id The ID of the song type to update.
+     * @return void
+     */
     public function update($id) {
         $name = trim($_POST['name'] ?? '');
         $slug = trim($_POST['slug'] ?? '');
@@ -72,6 +109,12 @@ class SongTypesController extends BaseAdminController {
         $this->redirect('/admin/song-types');
     }
 
+    /**
+     * Deletes a song type or deactivates it if it's currently in use by songs.
+     *
+     * @param int $id The ID of the song type to delete/deactivate.
+     * @return void
+     */
     public function delete($id) {
         $used = $this->typeModel->isUsed($id);
         if ($used) {
@@ -84,6 +127,11 @@ class SongTypesController extends BaseAdminController {
         $this->redirect('/admin/song-types');
     }
 
+    /**
+     * Toggles the active status of a song type.
+     * @param int $id The ID of the song type to toggle.
+     * @return void
+     */
     public function toggle($id) {
         $this->typeModel->toggleStatus($id);
         $_SESSION['success'] = 'Song type status toggled.';

@@ -4,10 +4,20 @@ namespace App\Controllers\Admin;
 use App\Models\AdminModel;
 use App\Utils\TOTPAuthenticator;
 
+/**
+ * Handles administrative operations for managing admin credentials and Two-Factor Authentication (2FA).
+ */
 class CredentialsController extends BaseAdminController
 {
+    /**
+     * @var AdminModel The AdminModel instance for database operations.
+     */
     private $adminModel;
 
+    /**
+     * Constructor for CredentialsController.
+     * Initializes the AdminModel.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -15,7 +25,8 @@ class CredentialsController extends BaseAdminController
     }
 
     /**
-     * Muestra la página principal de gestión de credenciales y 2FA
+     * Displays the main credentials management page, including options for 2FA setup.
+     * @return void
      */
     public function index()
     {
@@ -38,7 +49,9 @@ class CredentialsController extends BaseAdminController
     }
 
     /**
-     * Procesa la actualización de username/password
+     * Processes the update of the administrator's username and/or password.
+     * Requires current credentials for verification and validates new password confirmation.
+     * @return void
      */
     public function updateCredentials()
     {
@@ -47,8 +60,8 @@ class CredentialsController extends BaseAdminController
         $newUsername = trim($_POST['new_username'] ?? '');
         $newPassword = $_POST['new_password'] ?? '';
         $confirmPassword = $_POST['confirm_password'] ?? '';
-
-        // Obtener credenciales actuales de la base de datos
+        
+        // Get current credentials from the database
         $admin = $this->adminModel->getAdminByUsername($currentUsername);
         if (!$admin || !password_verify($currentPassword, $admin['password'])) {
             $_SESSION['error'] = "Current username or password is incorrect.";
@@ -73,7 +86,7 @@ class CredentialsController extends BaseAdminController
 
         if ($this->adminModel->updateCredentials($updateUsername, $updatePasswordHash)) {
             $_SESSION['success'] = "Credentials updated successfully!";
-            // Si el username cambió, la sesión sigue siendo válida (no es necesario reiniciar)
+            // If the username changed, the session remains valid (no restart needed)
         } else {
             $_SESSION['error'] = "Failed to update credentials.";
         }
@@ -81,7 +94,9 @@ class CredentialsController extends BaseAdminController
     }
 
     /**
-     * Activa 2FA (verifica el código antes de guardar)
+     * Activates Two-Factor Authentication (2FA) for the administrator.
+     * Verifies the provided 2FA code before saving the secret to the database.
+     * @return void
      */
     public function enable2fa()
     {
@@ -97,7 +112,6 @@ class CredentialsController extends BaseAdminController
             }
         } else {
             $_SESSION['error'] = "Invalid 2FA code. Please try again.";
-            // Redirigir de nuevo a la página con el formulario de setup
             $this->redirect('/admin/credentials?setup_2fa=1');
             return;
         }
@@ -105,7 +119,8 @@ class CredentialsController extends BaseAdminController
     }
 
     /**
-     * Desactiva 2FA
+     * Deactivates Two-Factor Authentication (2FA) for the administrator.
+     * @return void
      */
     public function disable2fa()
     {

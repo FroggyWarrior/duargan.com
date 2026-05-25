@@ -9,7 +9,7 @@
     <?php if ($latestRelease): ?>
     <section class="latest-release">
         <div class="latest-release-bg" style="background-image: url('<?php echo $latestRelease['cover_image_url']; ?>')"></div>
-        <img src="<?php echo $latestRelease['cover_image_url']; ?>" alt="<?php echo htmlspecialchars($latestRelease['title']); ?>" class="latest-release-cover">
+        <img src="<?php echo $latestRelease['cover_image_url']; ?>" alt="Latest Release: <?php echo htmlspecialchars($latestRelease['title']); ?>" class="latest-release-cover">
         <div class="release-content">
             <h2><?php echo htmlspecialchars($latestRelease['title']); ?></h2>
             <p>Latest single released on <?php echo htmlspecialchars($latestRelease['release_date']); ?></p>
@@ -39,6 +39,7 @@
                     class="platform-btn icon-only" 
                     target="_blank" 
                     rel="noopener" 
+                    aria-label="Listen to <?php echo htmlspecialchars($latestRelease['title']); ?> on <?php echo htmlspecialchars($platform['name']); ?>"
                     style="color: <?php echo $platform['color']; ?>; background-color: color-mix(in srgb, <?php echo $platform['color']; ?> 5%, white);">
                     <?php echo html_entity_decode(stripslashes($platform['icon_svg'])); ?>
                 </a>
@@ -53,16 +54,22 @@
             <h2>Official Releases</h2>
             <a href="music.php" class="view-all-link" style="color: var(--primary); text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
                 <span>View All Music</span>
-                <span class="material-icons" style="font-size: 18px;">arrow_forward</span>
+                <span class="material-icons" style="font-size: 18px;" aria-hidden="true">arrow_forward</span>
             </a>
         </div>
         <div class="music-grid">
             <?php foreach ($officialReleases as $index => $single): 
                 if ($index === 0) continue;
             ?>
-            <div class="music-card" onclick="window.location.href='song.php?id=<?php echo $single['id']; ?>'" style="cursor: pointer;">
+            <div class="music-card" 
+                onclick="window.location.href='song.php?id=<?php echo $single['id']; ?>'" 
+                onkeydown="if(event.key === 'Enter') window.location.href='song.php?id=<?php echo $single['id']; ?>'"
+                style="cursor: pointer;" 
+                tabindex="0" 
+                role="link" 
+                aria-label="View details for <?php echo htmlspecialchars($single['title']); ?>">
                 <div class="music-card-bg" style="background-image: url('<?php echo $single['cover_image_url']; ?>')"></div>
-                <img src="<?php echo $single['cover_image_url']; ?>" alt="<?php echo htmlspecialchars($single['title']); ?>" class="music-cover">
+                <img src="<?php echo $single['cover_image_url']; ?>" alt="Cover art for <?php echo htmlspecialchars($single['title']); ?>" class="music-cover">
                 <div class="music-card-content">
                     <div class="music-info">
                         <h3><?php echo htmlspecialchars($single['title']); ?></h3>
@@ -77,6 +84,7 @@
                             class="platform-btn icon-only" 
                             target="_blank" 
                             rel="noopener" 
+                            aria-label="Listen on <?php echo htmlspecialchars($platform['name']); ?>"
                             style="color: <?php echo $platform['color']; ?>; background-color: color-mix(in srgb, <?php echo $platform['color']; ?> 5%, white);">
                             <?php echo html_entity_decode(stripslashes($platform['icon_svg'])); ?>
                         </a>

@@ -3,23 +3,47 @@ namespace App\Controllers\Admin;
 
 use App\Models\GenreModel;
 
+/**
+ * Handles administrative operations for managing music genres.
+ */
 class GenresController extends BaseAdminController {
+    /**
+     * @var GenreModel The GenreModel instance for database operations.
+     */
     private $genreModel;
 
+    /**
+     * Constructor for GenresController.
+     * Initializes the GenreModel with admin privileges.
+     */
     public function __construct() {
         parent::__construct();
         $this->genreModel = new GenreModel(true);
     }
 
+    /**
+     * Displays a list of all genres, including their usage count.
+     * @return void
+     */
     public function index() {
         $genres = $this->genreModel->getAllWithUsage();
         $this->render('admin/genres/index', ['genres' => $genres]);
     }
 
+    /**
+     * Displays the form for creating a new genre.
+     * @return void
+     */
     public function create() {
         $this->render('admin/genres/form', ['isEdit' => false, 'genre' => null]);
     }
 
+    /**
+     * Processes the submission of the new genre creation form.
+     * Validates input, generates a slug if not provided, and attempts to save the genre.
+     * Handles duplicate entry errors.
+     * @return void
+     */
     public function store() {
         $name = trim($_POST['name'] ?? '');
         $slug = trim($_POST['slug'] ?? '');
@@ -43,6 +67,12 @@ class GenresController extends BaseAdminController {
         $this->redirect('/admin/genres');
     }
 
+    /**
+     * Displays the form for editing an existing genre.
+     * Redirects to the genre list if the genre is not found.
+     * @param int $id The ID of the genre to edit.
+     * @return void
+     */
     public function edit($id) {
         $genre = $this->genreModel->getById($id);
         if (!$genre) {
@@ -52,6 +82,13 @@ class GenresController extends BaseAdminController {
         $this->render('admin/genres/form', ['isEdit' => true, 'genre' => $genre]);
     }
 
+    /**
+     * Processes the submission of the genre update form.
+     * Validates input and attempts to update the genre's name and slug.
+     * Handles duplicate entry errors.
+     * @param int $id The ID of the genre to update.
+     * @return void
+     */
     public function update($id) {
         $name = trim($_POST['name'] ?? '');
         $slug = trim($_POST['slug'] ?? '');
@@ -72,10 +109,15 @@ class GenresController extends BaseAdminController {
         $this->redirect('/admin/genres');
     }
 
+    /**
+     * Deletes a genre or deactivates it if it's currently in use by songs.
+     *
+     * @param int $id The ID of the genre to delete/deactivate.
+     * @return void
+     */
     public function delete($id) {
         $used = $this->genreModel->isUsed($id);
         if ($used) {
-            // Soft delete: deactivate instead of hard delete
             $this->genreModel->toggleStatus($id);
             $_SESSION['success'] = 'Genre deactivated (used in songs).';
         } else {
@@ -85,6 +127,11 @@ class GenresController extends BaseAdminController {
         $this->redirect('/admin/genres');
     }
 
+    /**
+     * Toggles the active status of a genre.
+     * @param int $id The ID of the genre to toggle.
+     * @return void
+     */
     public function toggle($id) {
         $this->genreModel->toggleStatus($id);
         $_SESSION['success'] = 'Genre status toggled.';

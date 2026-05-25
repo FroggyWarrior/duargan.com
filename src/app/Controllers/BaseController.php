@@ -1,19 +1,32 @@
 <?php
 namespace App\Controllers;
 
+use App\Core\Controller;
 use App\Models\SocialMediaModel;
 
 /**
  * BaseController provides common functionality and data (like headers/footers) 
  * for all public-facing controllers.
  */
-class BaseController {
+class BaseController extends Controller {
+    /**
+     * @var array Common data to be passed to all views.
+     */
     protected $commonData = [];
 
+    /**
+     * Constructor for BaseController.
+     * Initializes common data and CSRF token.
+     */
     public function __construct() {
         // Fetch data that most public page needs (like social media links for the footer)
         $socialModel = new SocialMediaModel();
         $this->commonData['social_media'] = $socialModel->getActivePlatforms();
+
+        // Default SEO metadata
+        $this->commonData['page_title'] = 'Duargan | Electronic Music Artist';
+        $this->commonData['page_description'] = 'Listen to the latest music and official releases from Duargan.';
+        $this->commonData['meta_keywords'] = 'Duargan, Hardstyle, Electronic Music, Producer, Official Releases';
 
         // Initialize CSRF token if it doesn't exist
         if (empty($_SESSION['csrf_token'])) {
@@ -24,8 +37,9 @@ class BaseController {
     
     /**
      * Renders a view wrapped in the standard header and footer.
-     * * @param string $view Name of the view file (without .php)
-     * @param array $data Variables to pass to the view
+     * @param string $view Name of the view file (without .php extension).
+     * @param array $data Associative array of variables to pass to the view.
+     * @param bool $showFooter Whether to include the footer partial. Defaults to true.
      */
     protected function render($view, $data = [], $showFooter = true) {
         // Security check: Only allow alphanumeric, slashes, dashes and underscores.

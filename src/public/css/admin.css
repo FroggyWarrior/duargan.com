@@ -1,8 +1,11 @@
-/* ===================================================
-   Duargan Admin — Material Design 3 styles
-   =================================================== */
+/**
+ * Duargan Admin Stylesheet
+ * 
+ * Implements the administrative interface using Material Design 3 principles.
+ * Handles navigation, layout, and content management tools for the artist.
+ */
 
-/* ── Sidebar ─────────────────────────────────────── */
+/* --- Navigation Sidebar --- */
 .admin-sidebar {
     position: fixed;
     top: 0;
@@ -149,7 +152,7 @@
     color: #ff6b6b;
 }
 
-/* ── Page layout ─────────────────────────────────── */
+/* --- Layout Structure --- */
 .admin-page-wrapper {
     margin-left: 280px;
     min-height: 100vh;
@@ -202,7 +205,7 @@
     background-color: color-mix(in srgb, var(--on-surface) 8%, transparent);
 }
 
-/* ── Mobile overlay ──────────────────────────────── */
+/* --- Mobile Navigation Overlay --- */
 .nav-overlay {
     display: none;
     position: fixed;
@@ -214,7 +217,7 @@
     pointer-events: none;
 }
 
-/* ── Login Page ──────────────────────────────────── */
+/* --- Authentication Views --- */
 .admin-login-container {
     min-height: 100vh;
     display: flex;
@@ -306,7 +309,7 @@
     border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
-/* ── Admin content area ──────────────────────────── */
+/* --- Content Containers --- */
 .admin-container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -328,7 +331,7 @@
     text-align: center;
 }
 
-/* ── Songs grid ──────────────────────────────────── */
+/* --- Song Management UI --- */
 .songs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -401,7 +404,7 @@
     justify-content: flex-end;
 }
 
-/* ── Buttons ─────────────────────────────────────── */
+/* --- Global Action Buttons --- */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -477,7 +480,10 @@
     background-color: #ff5252;
 }
 
-.btn-submit {
+/**
+ * Primary action button used in forms.
+ */
+ .btn-submit {
     background-color: var(--primary);
     color: var(--on-primary);
     padding: 0.75rem 1.5rem;
@@ -496,7 +502,7 @@
     color: var(--primary);
 }
 
-/* ── FAB ─────────────────────────────────────────── */
+/* --- Floating Action Button --- */
 .fab {
     position: fixed;
     bottom: 2rem;
@@ -524,7 +530,7 @@
     font-size: 24px;
 }
 
-/* ── Modals ──────────────────────────────────────── */
+/* --- Modal Dialogs --- */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -566,7 +572,7 @@
     justify-content: flex-end;
 }
 
-/* ── Status messages ─────────────────────────────── */
+/* --- Notification Messages --- */
 .success-message {
     background-color: rgba(76, 175, 80, 0.1);
     color: #4CAF50;
@@ -576,7 +582,7 @@
     border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
-/* ── Forms ───────────────────────────────────────── */
+/* --- General Form Styling --- */
 .form-header {
     display: flex;
     align-items: center;
@@ -697,7 +703,7 @@
     border: 2px solid var(--outline);
 }
 
-/* Material floating labels */
+/* --- Material Floating Labels --- */
 .material-form-group {
     position: relative;
     margin-bottom: 1.5rem;
@@ -760,7 +766,7 @@
     margin-bottom: 1.5rem;
 }
 
-/* File upload */
+/* --- File Upload Controls --- */
 .file-upload-group {
     margin-bottom: 1.5rem;
 }
@@ -810,7 +816,7 @@
     border-top: 1px solid var(--outline);
 }
 
-/* ── Genre/Platform items ────────────────────────── */
+/* --- Taxonomy & Platform Management --- */
 .genres-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
@@ -836,7 +842,7 @@
 
 .genre-info {
     flex: 1;
-    min-width: 0;          /* lets the flex child shrink below its content width */
+    min-width: 0;
 }
 
 .genre-name {
@@ -869,11 +875,10 @@
     display: flex;
     gap: 0.5rem;
     margin-left: 0;
-    flex-shrink: 0;    /* buttons never squash */
+    flex-shrink: 0;
     align-self: center;
 }
 
-/* Platform extras */
 .platform-info-wrapper {
     display: flex;
     align-items: center;
@@ -910,7 +915,7 @@
     overflow-wrap: break-word;
 }
 
-/* Empty state */
+/* --- Empty Resource States --- */
 .no-items {
     text-align: center;
     padding: 3rem;
@@ -935,7 +940,7 @@
     display: inline-flex !important;
 }
 
-/* ── Platform form items ─────────────────────────── */
+/* --- Platform Selection Lists --- */
 .platform-form-item {
     margin-bottom: 0.75rem;
     padding: 1rem;
@@ -1017,7 +1022,7 @@
     box-sizing: border-box;
 }
 
-/* ── Color picker ────────────────────────────────── */
+/* --- Color Picker Component --- */
 .md3-color-picker {
     background-color: var(--surface);
     border-radius: 12px;
@@ -1173,7 +1178,7 @@
     color: var(--on-surface);
 }
 
-/* Warning box */
+/* --- Utility UI Components --- */
 .warning-box {
     background-color: rgba(255, 152, 0, 0.1);
     border: 1px solid rgba(255, 152, 0, 0.3);
@@ -1190,7 +1195,6 @@
     gap: 0.5rem;
 }
 
-/* Login theme toggle */
 .login-theme-toggle {
     display: flex;
     justify-content: center;
@@ -1224,9 +1228,8 @@
     color: var(--on-primary);
 }
 
-/* ── Responsive ──────────────────────────────────── */
+/* --- Responsive Adaptations --- */
 @media (max-width: 768px) {
-    /* Sidebar slides in from left */
     .admin-sidebar {
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
@@ -1255,13 +1258,11 @@
         display: flex;
     }
 
-    /* Content shifts down to clear mobile header */
     .admin-page-wrapper {
         margin-left: 0;
         padding-top: 64px;
     }
 
-    /* FAB stays above mobile tab bar area */
     .fab {
         bottom: 1.5rem;
         right: 1rem;
@@ -1314,7 +1315,7 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
-        overflow: visible;    /* allow shadow to show when stacked */
+        overflow: visible;
     }
 
     .genre-actions {
@@ -1374,7 +1375,6 @@
         height: 52px;
     }
 
-    /* Login */
     .admin-login-container {
         padding: 3rem 1rem;
     }
@@ -1446,7 +1446,7 @@
     }
 }
 
-/* ── Announcement management ─────────────────────────────────────────────── */
+/* --- Announcement System Management --- */
 .announcement-management-card {
     background-color: var(--surface-variant);
     border-radius: 12px;
@@ -1472,7 +1472,6 @@
     font-size: 16px;
 }
 
-/* The banner preview — same styles used in announcement_form too */
 .announcement-preview-banner {
     border-radius: 12px;
     padding: 1.25rem 1.75rem;

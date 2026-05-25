@@ -4,22 +4,30 @@ namespace App\Controllers;
 use App\Core\Database;
 use App\Models\SongModel;
 
+/**
+ * Handles public-facing pages of the website.
+ */
 class PageController extends BaseController {
     
+    /**
+     * Displays the home page with the latest official releases and announcements.
+     *
+     * @return void
+     */
     public function index() {
         $db = \App\Core\Database::getInstance()->getConnection();
         $ann_stmt = $db->query("SELECT title, background_color, text FROM announcement WHERE id = 1 AND is_active = 1 LIMIT 1");
         
-        // Added the 'new' keyword here!
+        /** @var SongModel $songModel */
         $songModel = new \App\Models\SongModel();
         
-        // 1. Get the official releases
+        // Get the official releases
         $officialReleases = $songModel->getOfficialReleases();
         
-        // 2. Define the latest release (exactly as it was in your old index.php)
+        // Define the latest release
         $latestRelease = !empty($officialReleases) ? $officialReleases[0] : null;
 
-        // 3. Pass ALL variables down to the view
+        // Pass all variables down to the view
         $this->render('home', [
             'pageTitle' => "Duargan - Music Producer",
             'currentPage' => 'index',
@@ -29,6 +37,11 @@ class PageController extends BaseController {
         ]);
     }
 
+    /**
+     * Displays the detail page for a specific song.
+     * Redirects to the music page if the song is not found.
+     * @return void
+     */
     public function song() {
         $songId = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $songModel = new \App\Models\SongModel();
@@ -39,10 +52,10 @@ class PageController extends BaseController {
             exit;
         }
 
-        // Other song with all its data
+        // Fetch other songs with detailed data
         $otherSongs = $songModel->getOtherSongsDetailed($songId, 4);
 
-        // Map variable names for the View
+        // Map variable names for the view
         $song_genres   = $song['genres'] ?? [];
         $song_platforms = $song['platforms'] ?? [];
 
@@ -60,9 +73,15 @@ class PageController extends BaseController {
         ]);
     }
 
+    /**
+     * Generates HTML for social sharing buttons for a given song.
+     *
+     * @param array $song The song data array.
+     * @return string The HTML string for the share buttons.
+     */
     private function generateShareButtons($song) {
         $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-        $song_url = $base_url . "/song.php?id=" . $song['id']; // Ajusta si cambiaste la ruta
+        $song_url = $base_url . "/song.php?id=" . $song['id'];
         $encoded_url = urlencode($song_url);
         $encoded_title = urlencode("Listen to \"" . $song['title'] . "\" by Duargan");
         $encoded_text = urlencode("Check out \"" . $song['title'] . "\" by Duargan");
@@ -121,6 +140,10 @@ class PageController extends BaseController {
         return $html;
     }
 
+    /**
+     * Displays the music library page, listing all available songs.
+     * @return void
+     */
     public function music() {
         $songModel = new \App\Models\SongModel();
 
@@ -133,6 +156,10 @@ class PageController extends BaseController {
         ]);
     }
 
+    /**
+     * Displays the about page.
+     * @return void
+     */
     public function about() {
         $this->render('about', [
             'pageTitle' => "About Me | Duargan",
@@ -140,6 +167,10 @@ class PageController extends BaseController {
         ]);
     }
 
+    /**
+     * Displays the contact page.
+     * @return void
+     */
     public function contact() {
         $this->render('contact', [
             'pageTitle' => "Contact Duargan",

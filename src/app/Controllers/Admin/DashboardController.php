@@ -6,28 +6,41 @@ use App\Models\GenreModel;
 use App\Models\PlatformModel;
 use App\Models\SongTypeModel;
 
+/**
+ * Handles administrative operations related to songs, including listing, creating,
+ * editing, and deleting songs in the admin panel.
+ */
 class DashboardController extends BaseAdminController
 {
+    /**
+     * @var AdminSongModel The AdminSongModel instance for song-related database operations.
+     */
     private $songModel;
 
+    /**
+     * Constructor for DashboardController.
+     * Calls the parent constructor for authentication and initializes AdminSongModel.
+     */
     public function __construct()
     {
         parent::__construct();
-        $this->songModel = new AdminSongModel(); // usa conexión admin
+        $this->songModel = new AdminSongModel();
     }
 
     /**
-     * Listado de canciones
+     * Displays a list of all songs in the admin panel.
+     * @return void
      */
     public function index()
     {
-        // Reutilizamos el método getAllMusic() del SongModel público
         $songs = $this->songModel->getAllMusic();
         $this->render('admin/panel', ['songs' => $songs]);
     }
 
     /**
-     * Muestra formulario para crear nueva canción
+     * Displays the form for creating a new song.
+     * Populates the form with all active genres, platforms, and song types.
+     * @return void
      */
     public function create()
     {
@@ -51,7 +64,10 @@ class DashboardController extends BaseAdminController
     }
 
     /**
-     * Procesa el formulario de creación
+     * Processes the submission of the new song creation form.
+     * Handles data validation, cover image upload, and database insertion for the song,
+     * its genres, and platforms.
+     * @return void
      */
     public function store()
     {
@@ -62,7 +78,7 @@ class DashboardController extends BaseAdminController
         $selectedPlatforms = $_POST['platforms'] ?? [];
         $platformUrls = $_POST['platform_urls'] ?? [];
 
-        // Manejo de imagen de portada
+        // Handle cover image upload
         $coverImageUrl = $this->handleCoverUpload();
         if (!$coverImageUrl && !empty($_POST['cover_image_url'])) {
             $coverImageUrl = trim($_POST['cover_image_url']);
@@ -77,12 +93,12 @@ class DashboardController extends BaseAdminController
             return;
         }
 
-        // Guardar canción
+        // Save song
         $songId = $this->songModel->create($title, $releaseDate, $coverImageUrl, $typeId);
         if ($songId) {
-            // Sincronizar géneros
+            // Sync genres
             $this->songModel->syncGenres($songId, $selectedGenres);
-            // Sincronizar plataformas (solo las seleccionadas con URL)
+            // Sync platforms (only selected ones with URL)
             $platformsToSync = [];
             foreach ($selectedPlatforms as $pId) {
                 if (!empty($platformUrls[$pId])) {
@@ -98,7 +114,11 @@ class DashboardController extends BaseAdminController
     }
 
     /**
-     * Muestra formulario de edición
+     * Displays the form for editing an existing song.
+     * Populates the form with the song's current data, including its genres and platforms.
+     *
+     * @param int $id The ID of the song to edit.
+     * @return void
      */
     public function edit($id)
     {
@@ -117,10 +137,10 @@ class DashboardController extends BaseAdminController
         $allPlatforms = $platformModel->getAllActive();
         $allTypes = $typeModel->getAllActive();
 
-        // Obtener géneros asignados
+        // Get assigned genres
         $songGenres = $this->songModel->getGenresForSong($id);
 
-        // Obtener plataformas con URLs
+        // Get platforms with URLs
         $songPlatforms = $this->songModel->getPlatformsForSong($id);
         $platformsWithUrls = [];
         foreach ($songPlatforms as $sp) {
@@ -139,7 +159,11 @@ class DashboardController extends BaseAdminController
     }
 
     /**
-     * Procesa la actualización de una canción
+     * Processes the submission of the song update form.
+     * Handles data validation, cover image upload, and database update for the song,
+     * its genres, and platforms.
+     * @param int $id The ID of the song to update.
+     * @return void
      */
     public function update($id)
     {
@@ -150,12 +174,12 @@ class DashboardController extends BaseAdminController
         $selectedGenres = $_POST['genres'] ?? [];
         $selectedPlatforms = $_POST['platforms'] ?? [];
         $platformUrls = $_POST['platform_urls'] ?? [];
-
-        // Manejo de nueva imagen (si se subió)
+        
+        // Handle new image upload (if provided)
         $newCover = $this->handleCoverUpload();
-        $coverImageUrl = $newCover; // si es null, se mantendrá la existente
+        $coverImageUrl = $newCover; // If null, existing cover will be kept
 
-        // Si no se subió archivo pero se envió URL, usar esa URL
+        // If no file was uploaded but a URL was provided, use that URL
         if (!$newCover && !empty($_POST['cover_image_url'])) {
             $coverImageUrl = trim($_POST['cover_image_url']);
         }
@@ -169,7 +193,7 @@ class DashboardController extends BaseAdminController
             return;
         }
 
-        // Actualizar canción
+        // Update song
         $updated = $this->songModel->update($id, $title, $releaseDate, $coverImageUrl, $typeId);
         if ($updated) {
             $this->songModel->syncGenres($id, $selectedGenres);
@@ -188,7 +212,10 @@ class DashboardController extends BaseAdminController
     }
 
     /**
-     * Elimina una canción
+     * Deletes a song from the database.
+     *
+     * @param int $id The ID of the song to delete.
+     * @return void
      */
     public function delete($id)
     {
@@ -202,12 +229,16 @@ class DashboardController extends BaseAdminController
         $this->redirect('/admin/panel');
     }
 
-    // -------------------------------------------------------------------------
-    // Métodos privados auxiliares
-    // -------------------------------------------------------------------------
-
     /**
-     * Valida los datos del formulario de canción
+     * Validates the song data submitted via a form.
+     *
+     * @param string $title The song title.
+     * @param string $releaseDate The release date of the song.
+     * @param int $typeId The ID of the song type.
+     * @param array $genres An array of selected genre IDs.
+     * @param string|null $cover The URL or path to the cover image, or null if none.
+     * @param bool $isEdit Flag indicating if the validation is for an edit operation (cover image not mandatory).
+     * @return array An array of error messages, empty if validation passes.
      */
     private function validateSongData($title, $releaseDate, $typeId, $genres, $cover, $isEdit)
     {
@@ -231,8 +262,10 @@ class DashboardController extends BaseAdminController
     }
 
     /**
-     * Maneja la subida de la imagen de portada.
-     * Retorna la ruta relativa (ej: 'img/covers/abc.jpg') o null si no se subió archivo.
+     * Handles the upload of a cover image file.
+     * Creates the upload directory if it doesn't exist.
+     * @return string|null The relative path to the uploaded image (e.g., 'img/covers/abc.jpg')
+     *                     or null if no file was uploaded or an error occurred.
      */
     private function handleCoverUpload()
     {

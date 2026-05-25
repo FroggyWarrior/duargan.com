@@ -1,9 +1,21 @@
 <?php
 namespace App\Utils;
 
+/**
+ * Utility class for handling Time-based One-Time Password (TOTP) authentication.
+ */
 class TOTPAuthenticator {
+    /**
+     * @var int Length of the generated OTP code.
+     */
     protected $_codeLength = 6;
 
+    /**
+     * Generates a random Base32 secret key.
+     * 
+     * @param int $secretLength Length of the secret.
+     * @return string The generated secret.
+     */
     public function createSecret($secretLength = 16) {
         $validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
         $secret = "";
@@ -13,6 +25,13 @@ class TOTPAuthenticator {
         return $secret;
     }
 
+    /**
+     * Calculates the OTP code for a given secret at a specific time slice.
+     * 
+     * @param string $secret The Base32 secret.
+     * @param int|null $timeSlice The time slice (30s intervals). Defaults to current time.
+     * @return string The 6-digit OTP code.
+     */
     public function getCode($secret, $timeSlice = null) {
         if ($timeSlice === null) {
             $timeSlice = floor(time() / 30);
@@ -28,6 +47,15 @@ class TOTPAuthenticator {
         return str_pad($value % $module, $this->_codeLength, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Verifies if a provided code is valid for a secret.
+     * 
+     * @param string $secret The Base32 secret.
+     * @param string $code The code provided by the user.
+     * @param int $discrepancy Allowed time window (number of 30s slices before/after).
+     * @param int|null $currentTimeSlice The time slice to check against.
+     * @return bool True if the code is valid, false otherwise.
+     */
     public function verifyCode($secret, $code, $discrepancy = 1, $currentTimeSlice = null) {
         if ($currentTimeSlice === null) {
             $currentTimeSlice = floor(time() / 30);
@@ -43,10 +71,23 @@ class TOTPAuthenticator {
         return false;
     }
 
+    /**
+     * Generates a standard otpauth:// URL for QR code generation.
+     * 
+     * @param string $name Account name/username.
+     * @param string $secret The Base32 secret.
+     * @param string|null $title The issuer name.
+     * @return string The otpauth URL.
+     */
     public function getOTPAuthUrl($name, $secret, $title = null) {
         return 'otpauth://totp/'.urlencode($title).':'.urlencode($name).'?secret='.$secret.'&issuer='.urlencode($title);
     }
 
+    /**
+     * Decodes a Base32 encoded string.
+     * @param string $secret The Base32 string.
+     * @return string The binary decoded string.
+     */
     private function _base32Decode($secret) {
         if (empty($secret)) return '';
         $base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";

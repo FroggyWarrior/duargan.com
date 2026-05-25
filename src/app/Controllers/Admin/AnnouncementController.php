@@ -3,16 +3,26 @@ namespace App\Controllers\Admin;
 
 use App\Models\AnnouncementModel;
 
+/**
+ * Handles administrative operations for managing the site-wide announcement.
+ */
 class AnnouncementController extends BaseAdminController {
+    /**
+     * @var AnnouncementModel The AnnouncementModel instance for database operations.
+     */
     private $announcementModel;
-
+    /**
+     * Constructor for AnnouncementController.
+     * Initializes the AnnouncementModel with admin privileges.
+     */
     public function __construct() {
         parent::__construct();
         $this->announcementModel = new AnnouncementModel(true);
     }
 
     /**
-     * Muestra la página de gestión del anuncio
+     * Displays the announcement management page, showing the current announcement status.
+     * @return void
      */
     public function index() {
         $announcement = $this->announcementModel->get();
@@ -24,7 +34,9 @@ class AnnouncementController extends BaseAdminController {
     }
 
     /**
-     * Muestra el formulario de edición
+     * Displays the form for editing the site-wide announcement.
+     * Populates the form with existing announcement data if available.
+     * @return void
      */
     public function edit() {
         $announcement = $this->announcementModel->get();
@@ -36,7 +48,9 @@ class AnnouncementController extends BaseAdminController {
     }
 
     /**
-     * Procesa el formulario de guardado
+     * Processes the submission of the announcement update form.
+     * Validates input data and attempts to save the announcement to the database.
+     * @return void
      */
     public function update() {
         $title = trim($_POST['title'] ?? '');
@@ -67,7 +81,9 @@ class AnnouncementController extends BaseAdminController {
     }
 
     /**
-     * Alterna el estado activo/inactivo
+     * Toggles the active status of the site-wide announcement.
+     * If the announcement is active, it becomes inactive, and vice-versa.
+     * @return void
      */
     public function toggle() {
         $this->announcementModel->toggle();

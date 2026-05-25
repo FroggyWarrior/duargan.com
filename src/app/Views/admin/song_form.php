@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title><?= $isEdit ? 'Edit Song' : 'Add Song' ?> | Duargan Admin</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -26,7 +27,7 @@ renderAdminSidebar($currentAdminPage);
 <div class="admin-page-wrapper">
     <main class="admin-container">
         <div class="form-header">
-            <a href="/admin/panel" class="back-btn"><span class="material-icons">arrow_back</span></a>
+            <a href="/admin/panel" class="back-btn" aria-label="Go back to dashboard"><span class="material-icons" aria-hidden="true">arrow_back</span></a>
             <h1 class="admin-title"><?= $isEdit ? 'Edit Song' : 'Add New Song' ?></h1>
         </div>
         <div class="form-card">
@@ -45,40 +46,40 @@ renderAdminSidebar($currentAdminPage);
 
                 <!-- Title -->
                 <div class="material-form-group with-help">
-                    <input type="text" name="title" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['title'] : ($_SESSION['old_input']['title'] ?? '')) ?>" placeholder=" " required>
+                    <input type="text" id="song_title" name="title" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['title'] : ($_SESSION['old_input']['title'] ?? '')) ?>" placeholder=" " required aria-required="true" aria-describedby="title_help">
                     <label class="material-form-label">Song Title *</label>
                 </div>
-                <p class="form-help">Enter the title of the song</p>
+                <p id="title_help" class="form-help">Enter the title of the song</p>
 
                 <!-- Release Date -->
                 <div class="material-form-group with-help">
-                    <input type="text" name="release_date" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['release_date'] : ($_SESSION['old_input']['release_date'] ?? '')) ?>" placeholder=" " required>
+                    <input type="text" id="release_date" name="release_date" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['release_date'] : ($_SESSION['old_input']['release_date'] ?? '')) ?>" placeholder=" " required aria-required="true" aria-describedby="date_help">
                     <label class="material-form-label">Release Date *</label>
                 </div>
-                <p class="form-help">Format: e.g., June 15, 2023</p>
+                <p id="date_help" class="form-help">Format: e.g., June 15, 2023</p>
 
                 <!-- Cover Image Upload -->
                 <div class="file-upload-group">
-                    <button type="button" class="file-upload-btn" onclick="document.getElementById('cover_image').click()"><span class="material-icons">upload</span> Upload Cover Image</button>
+                    <button type="button" class="file-upload-btn" onclick="document.getElementById('cover_image').click()" aria-label="Upload cover image"><span class="material-icons" aria-hidden="true">upload</span> Upload Cover Image</button>
                     <input type="file" id="cover_image" name="cover_image" class="file-upload-input" accept="image/*" onchange="updateFileName(this)">
-                    <div id="file_name" class="file-name">No file selected</div>
+                    <div id="file_name" class="file-name" aria-live="polite">No file selected</div>
                     <p class="form-help">Upload a cover image file (JPG, PNG, etc.)</p>
                 </div>
 
                 <!-- Cover Image URL -->
                 <div class="material-form-group with-help">
-                    <input type="text" name="cover_image_url" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['cover_image_url'] : ($_SESSION['old_input']['cover_image_url'] ?? '')) ?>" placeholder=" " onchange="updatePreviewFromUrl(this.value)">
+                    <input type="text" id="cover_image_url" name="cover_image_url" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['cover_image_url'] : ($_SESSION['old_input']['cover_image_url'] ?? '')) ?>" placeholder=" " onchange="updatePreviewFromUrl(this.value)" aria-describedby="url_help">
                     <label class="material-form-label">Or use Image URL</label>
                 </div>
-                <p class="form-help"><?= $isEdit ? 'Leave empty to keep existing cover, or enter a new URL.' : 'Enter a direct URL to the cover image (required if not uploading a file).' ?></p>
+                <p id="url_help" class="form-help"><?= $isEdit ? 'Leave empty to keep existing cover, or enter a new URL.' : 'Enter a direct URL to the cover image (required if not uploading a file).' ?></p>
 
                 <?php if ($isEdit && $song['cover_image_url']): ?>
                 <div style="margin-top: 1rem;">
                     <p><strong>Current Cover Image:</strong></p>
-                    <img src="/<?= ltrim($song['cover_image_url'], '/') ?>" alt="Current cover" class="cover-preview" style="max-width: 200px;">
+                    <img src="/<?= ltrim($song['cover_image_url'], '/') ?>" alt="Current cover image for <?= htmlspecialchars($song['title']) ?>" class="cover-preview" style="max-width: 200px;">
                 </div>
                 <?php else: ?>
-                <img id="cover_preview" class="cover-preview" src="" alt="Cover preview" style="display: none; max-width: 200px;">
+                <img id="cover_preview" class="cover-preview" src="" alt="New cover image preview" style="display: none; max-width: 200px;">
                 <?php endif; ?>
 
                 <!-- Genres -->
@@ -126,15 +127,15 @@ renderAdminSidebar($currentAdminPage);
                             }
                         ?>
                         <div class="platform-form-item">
-                            <div class="platform-form-header" onclick="togglePlatformUrl(<?= $platform['id'] ?>)">
-                                <div class="platform-form-icon"><?= $platform['icon_svg'] ?></div>
+                            <div class="platform-form-header" onclick="document.getElementById('platform_<?= $platform['id'] ?>').click()">
+                                <div class="platform-form-icon" aria-hidden="true"><?= $platform['icon_svg'] ?></div>
                                 <div style="flex:1; min-width:0;">
                                     <div class="platform-form-name"><?= htmlspecialchars($platform['name']) ?></div>
                                     <?php if ($platform['base_url']): ?>
                                     <div class="platform-form-base-url">Base URL: <?= htmlspecialchars($platform['base_url']) ?></div>
                                     <?php endif; ?>
                                 </div>
-                                <input type="checkbox" name="platforms[]" value="<?= $platform['id'] ?>" class="platform-form-checkbox" <?= $checked ? 'checked' : '' ?> onchange="togglePlatformUrl(<?= $platform['id'] ?>)">
+                                <input type="checkbox" id="platform_<?= $platform['id'] ?>" name="platforms[]" value="<?= $platform['id'] ?>" class="platform-form-checkbox" <?= $checked ? 'checked' : '' ?> onchange="togglePlatformUrl(<?= $platform['id'] ?>)">
                             </div>
                             <div class="platform-url-group" id="platform_url_<?= $platform['id'] ?>" style="display: <?= $checked ? 'block' : 'none' ?>">
                                 <input type="url" name="platform_urls[<?= $platform['id'] ?>]" class="platform-url-input" placeholder="Enter track URL for <?= htmlspecialchars($platform['name']) ?>" value="<?= htmlspecialchars($url) ?>">
@@ -147,7 +148,7 @@ renderAdminSidebar($currentAdminPage);
                 <div class="form-actions">
                     <a href="/admin/panel" class="btn btn-cancel">Cancel</a>
                     <button type="submit" class="btn btn-submit">
-                        <span class="material-icons"><?= $isEdit ? 'save' : 'add' ?></span>
+                        <span class="material-icons" aria-hidden="true"><?= $isEdit ? 'save' : 'add' ?></span>
                         <?= $isEdit ? 'Update Song' : 'Add Song' ?>
                     </button>
                 </div>

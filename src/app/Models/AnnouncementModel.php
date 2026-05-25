@@ -4,17 +4,29 @@ namespace App\Models;
 use App\Core\Database;
 use PDO;
 
+/**
+ * Model for managing site-wide announcements.
+ */
 class AnnouncementModel {
+    /**
+     * @var PDO Database connection instance.
+     */
     protected $db;
 
+    /**
+     * Constructor for AnnouncementModel.
+     * 
+     * @param bool $useAdmin Whether to use the administrative database connection.
+     */
     public function __construct($useAdmin = true) {
         $type = $useAdmin ? 'admin' : 'content';
         $this->db = Database::getInstance($type)->getConnection();
     }
 
     /**
-     * Obtiene el anuncio único (id = 1)
-     * @return array|false
+     * Fetches the unique announcement record.
+     * 
+     * @return array|false The announcement data or false if not found.
      */
     public function get() {
         $stmt = $this->db->query("SELECT * FROM announcement WHERE id = 1 LIMIT 1");
@@ -22,7 +34,14 @@ class AnnouncementModel {
     }
 
     /**
-     * Guarda o actualiza el anuncio (si no existe, lo crea con id=1)
+     * Saves or updates the unique announcement.
+     * Creates a new record if it doesn't exist, otherwise updates the existing one.
+     * 
+     * @param string $title The announcement title.
+     * @param string $backgroundColor The hex color code for the background.
+     * @param string $text The announcement content.
+     * @param int|bool $isActive Activation status.
+     * @return bool True on success, false on failure.
      */
     public function save($title, $backgroundColor, $text, $isActive) {
         $existing = $this->get();
@@ -43,7 +62,9 @@ class AnnouncementModel {
     }
 
     /**
-     * Alterna el estado activo/inactivo
+     * Toggles the active status of the announcement.
+     * 
+     * @return bool True on success, false on failure.
      */
     public function toggle() {
         $current = $this->get();
@@ -54,7 +75,9 @@ class AnnouncementModel {
     }
 
     /**
-     * Obtiene el anuncio activo para el frontend
+     * Fetches the active announcement for the public frontend.
+     * 
+     * @return array|false The active announcement data or false if none.
      */
     public function getActive() {
         $stmt = $this->db->query("SELECT title, background_color, text FROM announcement WHERE id = 1 AND is_active = 1 LIMIT 1");

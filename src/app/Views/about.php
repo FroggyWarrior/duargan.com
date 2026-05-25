@@ -1,6 +1,6 @@
 <main class="main-container">
     <section style="text-align: center; padding: 2rem;">
-        <img src="/img/me.jpg" alt="Duargan" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin-bottom: 2rem;">
+        <img src="/img/me.jpg" alt="Profile picture of Duargan" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin-bottom: 2rem;">
         
         <h2>About Me</h2>
         

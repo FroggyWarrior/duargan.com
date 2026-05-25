@@ -53,11 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (burgerMenu && mobileMenu && mobileMenuClose) {
         burgerMenu.addEventListener('click', function() {
             mobileMenu.classList.add('active');
+            burgerMenu.setAttribute('aria-expanded', 'true');
             document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
         });
         
         mobileMenuClose.addEventListener('click', function() {
             mobileMenu.classList.remove('active');
+            burgerMenu.setAttribute('aria-expanded', 'false');
             document.body.style.overflow = 'auto'; // Restore scrolling
         });
         
@@ -66,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileLinks.forEach(link => {
             link.addEventListener('click', function() {
                 mobileMenu.classList.remove('active');
+                burgerMenu.setAttribute('aria-expanded', 'false');
                 document.body.style.overflow = 'auto';
             });
         });
@@ -74,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileMenu.addEventListener('click', function(e) {
             if (e.target === mobileMenu) {
                 mobileMenu.classList.remove('active');
+                burgerMenu.setAttribute('aria-expanded', 'false');
                 document.body.style.overflow = 'auto';
             }
         });

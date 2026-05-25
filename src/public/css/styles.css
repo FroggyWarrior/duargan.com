@@ -1,4 +1,11 @@
-/* Material Design 3 Color Scheme - Dark Mode as Default */
+/**
+ * Duargan Public Site Stylesheet
+ * 
+ * Main stylesheet for the public-facing pages.
+ * Follows Material Design 3 principles with dynamic theme support.
+ */
+
+/* --- Theme Definitions --- */
 :root {
     --primary: #D0BCFF;
     --on-primary: #381E72;
@@ -13,7 +20,6 @@
     --shadow: #000000;
 }
 
-/* Light Mode Colors */
 [data-theme="light"] {
     --primary: #6750A4;
     --on-primary: #FFFFFF;
@@ -28,7 +34,7 @@
     --shadow: #000000;
 }
 
-/* Base Styles */
+/* --- CSS Reset & Global Defaults --- */
 * {
     margin: 0;
     padding: 0;
@@ -43,7 +49,12 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* Header Styles */
+:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* --- Page Header & Navigation --- */
 header {
     background-color: var(--surface);
     box-shadow: 0 1px 3px rgba(0,0,0,0.12);
@@ -61,7 +72,6 @@ header {
     margin: 0 auto;
 }
 
-/* Logo Styles */
 .logo {
     filter: brightness(0) saturate(100%) invert(67%) sepia(56%) saturate(378%) hue-rotate(215deg) brightness(89%) contrast(87%);
 }
@@ -79,7 +89,6 @@ header {
     width: auto;
 }
 
-/* Navigation */
 .nav-menu {
     display: flex;
     list-style: none;
@@ -134,7 +143,7 @@ header {
     color: var(--on-primary-container);
 }
 
-/* Social Links */
+/* --- Footer Social Integration --- */
 .social-links {
     display: flex;
     gap: 1rem;
@@ -161,7 +170,7 @@ header {
     color: var(--primary);
 }
 
-/* Theme Toggle */
+/* --- UI Controls --- */
 .theme-toggle {
     display: flex;
     align-items: center;
@@ -174,14 +183,14 @@ header {
     color: var(--on-surface-variant);
 }
 
-/* Main Content */
+/* --- Main Content Area --- */
 .main-container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
 }
 
-/* Latest Release Section */
+/* --- Homepage Sections --- */
 .latest-release {
     margin-bottom: 3rem;
     width: 100%;
@@ -279,7 +288,7 @@ header {
     color: inherit;
 }
 
-.platform-btn.icon-only svg {
+ .platform-btn.icon-only svg {
     width: 20px;
     height: 20px;
 }
@@ -317,7 +326,6 @@ header {
     height: 18px;
 }
 
-/* Singles List */
 .singles-list h2 {
     color: var(--on-surface);
     margin-bottom: 1.5rem;
@@ -348,7 +356,7 @@ header {
     color: var(--on-primary);
 }
 
-/* Footer */
+/* --- Global Footer --- */
 footer {
     background-color: var(--surface-variant);
     padding: 2rem;
@@ -396,7 +404,7 @@ footer a {
     text-decoration: none;
 }
 
-/* Mobile Menu */
+/* --- Mobile Navigation Components --- */
 .burger-menu {
     display: none;
     flex-direction: column;
@@ -440,7 +448,6 @@ footer a {
     visibility: visible;
 }
 
-/* Slide content in slightly when menu opens */
 .mobile-menu .mobile-nav,
 .mobile-menu .mobile-social,
 .mobile-menu .mobile-theme-toggle,
@@ -531,7 +538,7 @@ footer a {
     color: var(--on-surface);
 }
 
-/* Contact Page */
+/* --- Contact View --- */
 .contact-info {
     text-align: center;
     max-width: 500px;
@@ -590,7 +597,7 @@ footer a {
     margin-top: 2rem;
 }
 
-/* Music Page */
+/* --- Music Library View --- */
 .music-library {
     padding: 2rem 0;
 }
@@ -602,7 +609,6 @@ footer a {
     font-size: 1.1rem;
 }
 
-/* Filter Toggle */
 .filter-toggle-btn {
     display: flex;
     align-items: center;
@@ -623,7 +629,6 @@ footer a {
     color: var(--on-primary);
 }
 
-/* Music Filters with Fixed Animation */
 .music-filters {
     max-height: 0;
     overflow: hidden;
@@ -633,7 +638,7 @@ footer a {
 }
 
 .music-filters.active {
-    max-height: 1000px; /* Increased to ensure all content fits */
+    max-height: 1000px;
     margin-bottom: 2rem;
     opacity: 1;
 }
@@ -729,7 +734,7 @@ footer a {
     background-color: color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
-/* Music Grid - 2 columns with equal height */
+/* --- Track Cards UI --- */
 .music-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -789,7 +794,6 @@ footer a {
     z-index: 0;
 }
 
-/* Cover image - square on left side */
 .music-cover {
     width: 150px;
     height: 150px;
@@ -808,7 +812,7 @@ footer a {
     flex-direction: column;
     z-index: 1;
     justify-content: space-between;
-    min-height: 150px; /* Ensure consistent minimum height */
+    min-height: 150px;
 }
 
 .music-info {
@@ -862,7 +866,7 @@ footer a {
     margin-top: auto;
     flex-shrink: 0;
     padding-top: 0.75rem;
-    flex-wrap: wrap; /* Allow wrapping */
+    flex-wrap: wrap;
 }
 
 .music-platform-btn {
@@ -897,7 +901,7 @@ footer a {
     color: var(--on-surface);
 }
 
-/* Song Detail Page Styles */
+/* --- Song Detail View --- */
 .back-button {
     display: inline-flex;
     align-items: center;
@@ -994,13 +998,13 @@ footer a {
     font-weight: 500;
 }
 
-.song-platforms h3 {
+ .song-platforms h3 {
     margin-bottom: 1rem;
     color: var(--on-surface);
     font-weight: 400;
 }
 
-/* More Music Section */
+/* --- Related Content Sections --- */
 .more-music {
     border-top: 1px solid var(--outline);
     padding-top: 3rem;
@@ -1012,7 +1016,7 @@ footer a {
     font-weight: 400;
 }
 
-/* Social Sharing Styles */
+/* --- Social Sharing Components --- */
 .share-buttons {
     margin-top: 2rem;
     padding-top: 1.5rem;
@@ -1024,14 +1028,14 @@ footer a {
     margin-bottom: 1rem;
     color: var(--on-surface-variant);
     font-weight: 500;
-    text-align: center; /* Center the text label */
+    text-align: center;
 }
 
 .share-icons-container {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    justify-content: center; /* Center by default for all screens */
+    justify-content: center;
 }
 
 .share-icon {
@@ -1054,15 +1058,14 @@ footer a {
     box-shadow: 0 6px 16px rgba(0,0,0,0.2);
 }
 
-/* X (formerly Twitter) - Correct for both light/dark modes */
 .share-icon.x {
-    color: #FFFFFF; /* White icon in light mode */
+    color: #FFFFFF;
     background-color: #000000;
     border-color: #000000;
 }
 
 [data-theme="dark"] .share-icon.x {
-    color: #000000; /* Black icon in dark mode */
+    color: #000000;
     background-color: #FFFFFF;
     border-color: #FFFFFF;
 }
@@ -1075,7 +1078,6 @@ footer a {
     background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* Facebook */
 .share-icon.facebook {
     color: #1877F2;
     border-color: #1877F2;
@@ -1085,7 +1087,6 @@ footer a {
     background-color: rgba(24, 119, 242, 0.1);
 }
 
-/* Email */
 .share-icon.email {
     color: #EA4335;
     border-color: #EA4335;
@@ -1095,7 +1096,6 @@ footer a {
     background-color: rgba(234, 67, 53, 0.1);
 }
 
-/* Copy Link */
 .share-icon.copy-link {
     color: var(--primary);
     border-color: var(--primary);
@@ -1105,7 +1105,6 @@ footer a {
     background-color: color-mix(in srgb, var(--primary) 10%, transparent);
 }
 
-/* Tooltip */
 .copy-tooltip {
     position: absolute;
     bottom: 100%;
@@ -1142,7 +1141,7 @@ footer a {
     transform: translateX(-50%) translateY(-5px);
 }
 
-/* Responsive Design */
+/* --- Responsive Media Queries --- */
 @media (max-width: 900px) {
     .header-container {
         padding: 1rem;
@@ -1205,7 +1204,6 @@ footer a {
         padding: 0;
     }
 
-    .release-content h2 {
         font-size: 2rem;
     }
     
@@ -1256,7 +1254,7 @@ footer a {
     }
 
     .music-card-content {
-        min-height: 120px; /* Match cover height */
+        min-height: 120px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -1266,7 +1264,7 @@ footer a {
         font-size: 1.1rem;
         -webkit-line-clamp: 2;
         line-clamp: 2;
-        margin-bottom: 0.5rem; /* Reduced margin for better spacing */
+        margin-bottom: 0.5rem;
     }
 
     .music-tags {
@@ -1310,7 +1308,6 @@ footer a {
         font-size: 0.875rem;
     }
     
-    /* Song Detail Page Mobile */
     .song-hero {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -1340,7 +1337,6 @@ footer a {
         justify-content: center;
     }
     
-    /* Footer Mobile */
     footer {
         padding: 2rem 1rem;
     }
@@ -1388,21 +1384,19 @@ footer a {
     }
 }
 
-/* Desktop styles - align left on larger screens */
 @media (min-width: 769px) {
     .share-buttons span {
-        text-align: left; /* Left align text on desktop */
+        text-align: left;
     }
     
     .share-icons-container {
-        justify-content: flex-start; /* Left align icons on desktop */
+        justify-content: flex-start;
     }
 }
 
-/* Tablet styles */
 @media (max-width: 768px) {
     .share-icons-container {
-        justify-content: center; /* Center on tablet */
+        justify-content: center;
     }
     
     .share-icon {
@@ -1433,7 +1427,6 @@ footer a {
         height: 90px;
     }
 
-    /* Smallest platform buttons for very small screens */
     .single-platforms .platform-btn,
     .music-platforms .platform-btn {
         width: 32px;
@@ -1459,7 +1452,6 @@ footer a {
         margin-bottom: 0.2rem;
     }
 
-    /* Music Small Screens - FIXED: Even padding and proper content fit */
     .music-library {
         padding: 1rem 0;
     }
@@ -1476,7 +1468,7 @@ footer a {
     }
 
     .music-card-content {
-        min-height: 100px; /* Match cover height */
+        min-height: 100px;
     }
     
     .music-tags {
@@ -1489,7 +1481,7 @@ footer a {
     }
 
     .music-platforms {
-        gap: 0.4rem; /* Slightly reduced gap on small screens */
+        gap: 0.4rem;
     }
 
     .music-platform-btn {
@@ -1502,7 +1494,6 @@ footer a {
         height: 13px;
     }
 
-    /* Song Detail Page Small Screens */
     .song-info h1 {
         font-size: 1.75rem;
     }
@@ -1534,7 +1525,7 @@ footer a {
     }
 
 }
-/* ── Site-wide announcement card ────────────────────────────────────────────── */
+/* --- Site-wide Announcement Banner --- */
 .site-announcement {
     border-radius: 12px;
     padding: 1.25rem 1.75rem;

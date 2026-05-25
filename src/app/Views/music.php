@@ -4,12 +4,12 @@
         <p class="music-subtitle">Explore all my tracks, including free and official releases, remixes, mixes and mash-ups</p>
         
         <!-- Filter Section -->
-        <button id="filterToggle" class="filter-toggle-btn">
+        <button id="filterToggle" class="filter-toggle-btn" aria-expanded="false" aria-controls="musicFilters">
             <span>Show Filters</span>
-            <span class="material-icons">arrow_drop_down</span>
+            <span class="material-icons" aria-hidden="true">arrow_drop_down</span>
         </button>
 
-        <div class="music-filters">
+        <div class="music-filters" id="musicFilters">
             <div class="filter-group">
                 <h3>Filter by Genre</h3>
                 <div class="filter-chips">
@@ -35,9 +35,9 @@
             </div>
             
             <div class="filter-actions">
-                <span class="filter-count" id="filterCount">Showing all <?php echo count($musicTracks); ?> tracks</span>
+                <span class="filter-count" id="filterCount" aria-live="polite">Showing all <?php echo count($musicTracks); ?> tracks</span>
                 <button class="sort-btn" id="sortBtn" aria-label="Sort by date">
-                    <span class="material-icons">arrow_downward</span>
+                    <span class="material-icons" aria-hidden="true">arrow_downward</span>
                     <span id="sortLabel">Newest first</span>
                 </button>
             </div>
@@ -62,12 +62,16 @@
             ?>
             <div class="music-card" 
                 onclick="window.location.href='/song?id=<?php echo $track['id']; ?>'" 
-                style="cursor: pointer;"
+                onkeydown="if(event.key === 'Enter') window.location.href='/song?id=<?php echo $track['id']; ?>'"
+                style="cursor: pointer;" 
+                tabindex="0" 
+                role="link" 
+                aria-label="View details for <?php echo htmlspecialchars($track['title']); ?>"
                 data-genres="<?php echo !empty($genre_slugs) ? htmlspecialchars(implode(' ', $genre_slugs)) : ''; ?>" 
                 data-type="<?php echo htmlspecialchars($track['type_slug']); ?>"
                 data-date="<?php $ts = strtotime($track['release_date']); echo $ts ? date('Y-m-d', $ts) : ''; ?>">
                 <div class="music-card-bg" style="background-image: url('<?php echo $track['cover_image_url']; ?>')"></div>
-                <img src="<?php echo $track['cover_image_url']; ?>" alt="<?php echo htmlspecialchars($track['title']); ?>" class="music-cover">
+                <img src="<?php echo $track['cover_image_url']; ?>" alt="Cover art for <?php echo htmlspecialchars($track['title']); ?>" class="music-cover">
                 <div class="music-card-content">
                     <div class="music-info">
                         <h3><?php echo htmlspecialchars($track['title']); ?></h3>
@@ -99,6 +103,7 @@
                             class="platform-btn icon-only" 
                             target="_blank" 
                             rel="noopener" 
+                            aria-label="Listen on <?php echo htmlspecialchars($platform['name']); ?>"
                             style="color: <?php echo $platform['color']; ?>; background-color: color-mix(in srgb, <?php echo $platform['color']; ?> 10%, white);">
                             <?php echo html_entity_decode(stripslashes($platform['icon_svg'])); ?>
                         </a>
@@ -226,11 +231,13 @@
                 musicFilters.offsetHeight; // force reflow
                 musicFilters.style.maxHeight = '0';
                 musicFilters.classList.remove('active');
+                filterToggle.setAttribute('aria-expanded', 'false');
                 setTimeout(function() { buttonText.textContent = 'Show Filters'; }, 200);
                 setTimeout(function() { musicFilters.style.maxHeight = ''; }, 500);
             } else {
                 musicFilters.classList.add('active');
                 musicFilters.style.maxHeight = musicFilters.scrollHeight + 'px';
+                filterToggle.setAttribute('aria-expanded', 'true');
                 buttonText.textContent = 'Hide Filters';
                 setTimeout(function() { musicFilters.style.maxHeight = 'none'; }, 500);
             }

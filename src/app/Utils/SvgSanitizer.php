@@ -1,10 +1,16 @@
 <?php
 namespace App\Utils;
 
+/**
+ * Utility class to sanitize SVG markup to prevent XSS attacks.
+ */
 class SvgSanitizer {
     /**
      * Sanitizes SVG string to prevent XSS.
      * Removes scripts, event handlers (on*), and dangerous attributes.
+     * 
+     * @param string $svg The raw SVG string.
+     * @return string The sanitized SVG string.
      */
     public static function sanitize(string $svg): string {
         if (empty($svg)) return '';

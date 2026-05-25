@@ -87,4 +87,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    /** --- 4. Scroll Reveal Animation --- */
+    const scrollElements = document.querySelectorAll('.fade-in-on-scroll');
+    
+    const elementInView = (el, dividend = 1) => {
+        const elementTop = el.getBoundingClientRect().top;
+        return (elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend);
+    };
+
+    const displayScrollElement = (element) => { el.classList.add('visible'); };
+
+    // Using Intersection Observer for better performance than scroll listeners
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Once visible, we can stop observing this specific element
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    scrollElements.forEach(el => {
+        observer.observe(el);
+    });
 });

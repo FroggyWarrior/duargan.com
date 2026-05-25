@@ -15,13 +15,15 @@
     <?php endif; ?>
 
     <?php if ($latestRelease): ?>
-    <section class="latest-release">
+    <section class="latest-release fade-in-on-scroll">
         <div class="latest-release-bg" style="background-image: url('<?php echo $latestRelease['cover_image_url']; ?>')"></div>
-        <img src="<?php echo $latestRelease['cover_image_url']; ?>" alt="Latest Release: <?php echo htmlspecialchars($latestRelease['title']); ?>" class="latest-release-cover">
+        <img src="<?php echo $latestRelease['cover_image_url']; ?>" alt="Latest Release: <?php echo htmlspecialchars($latestRelease['title']); ?>" class="latest-release-cover" loading="lazy">
         <div class="release-content" role="region" aria-label="Latest Release Details">
-            <h2><?php echo htmlspecialchars($latestRelease['title']); ?></h2>
+            <h2>
+                <a href="/song?id=<?php echo $latestRelease['id']; ?>" class="stretched-link" style="color: white; text-decoration: none; display: block;"><?php echo htmlspecialchars($latestRelease['title']); ?></a>
+            </h2>
             <p>Latest single released on <?php echo htmlspecialchars($latestRelease['release_date']); ?></p>
-            <div class="platform-buttons" aria-label="Streaming platforms">
+            <div class="platform-buttons" aria-label="Streaming platforms" style="position: relative; z-index: 3;">
                 <?php foreach ($latestRelease['platforms_data'] as $platform): 
                     $platform_url = !empty($platform['track_url']) ? $platform['track_url'] : $platform['base_url'];
                     if (empty($platform_url)) continue; // Skip if no URL is provided

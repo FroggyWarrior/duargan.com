@@ -110,4 +110,3 @@ This project is licensed under the **GPL-3.0 License**. You are free to fork, mo
 Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request.
 
 *Developed for the official Duargan website.*
-```

@@ -1,3 +1,11 @@
+<?php
+/**
+ * Song Detail View
+ * 
+ * Displays full information for a specific song, including high-res cover, 
+ * metadata, platform links, social sharing, and related tracks.
+ */
+?>
 <main class="main-container">
     <section class="song-detail">
         <a href="/music" class="back-button">
@@ -72,7 +80,7 @@
         <h2>More Music</h2>
         <div class="music-grid">
             <?php foreach ($otherSongs as $other_song): 
-                // Preparamos slugs para los filtros (opcional)
+                // Prepare tags and slugs for the card metadata
                 $other_genre_slugs = array_map(function($g) { return $g['slug']; }, $other_song['genres']);
                 $other_genre_names = array_map(function($g) { return $g['name']; }, $other_song['genres']);
             ?>
@@ -120,6 +128,10 @@
 </main>
 
 <script>
+/**
+ * Clipboard Copy functionality for the song page.
+ * Handles copying the song URL to the clipboard and managing tooltip feedback.
+ */
 document.addEventListener('DOMContentLoaded', function() {
     const copyLinkButtons = document.querySelectorAll('.share-icon.copy-link');
     

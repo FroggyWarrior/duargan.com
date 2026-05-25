@@ -1,3 +1,11 @@
+<?php
+/**
+ * Home Page View
+ * 
+ * Displays the site-wide announcement, the latest featured release hero section,
+ * and a grid of other official releases.
+ */
+?>
 <main class="main-container">
     <?php if ($announcement): ?>
     <div class="site-announcement" style="background-color: <?php echo htmlspecialchars($announcement['background_color']); ?>;">
@@ -10,13 +18,13 @@
     <section class="latest-release">
         <div class="latest-release-bg" style="background-image: url('<?php echo $latestRelease['cover_image_url']; ?>')"></div>
         <img src="<?php echo $latestRelease['cover_image_url']; ?>" alt="Latest Release: <?php echo htmlspecialchars($latestRelease['title']); ?>" class="latest-release-cover">
-        <div class="release-content">
+        <div class="release-content" role="region" aria-label="Latest Release Details">
             <h2><?php echo htmlspecialchars($latestRelease['title']); ?></h2>
             <p>Latest single released on <?php echo htmlspecialchars($latestRelease['release_date']); ?></p>
-            <div class="platform-buttons">
+            <div class="platform-buttons" aria-label="Streaming platforms">
                 <?php foreach ($latestRelease['platforms_data'] as $platform): 
                     $platform_url = !empty($platform['track_url']) ? $platform['track_url'] : $platform['base_url'];
-                    if (empty($platform_url)) continue;
+                    if (empty($platform_url)) continue; // Skip if no URL is provided
                 ?>
                 <a href="<?php echo htmlspecialchars($platform_url); ?>" 
                     class="platform-btn with-text" 
@@ -48,7 +56,7 @@
         </div>
     </section>
     <?php endif; ?>
-
+    
     <section class="singles-list">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <h2>Official Releases</h2>

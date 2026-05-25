@@ -1,4 +1,11 @@
 <?php
+/**
+ * Admin Sidebar Partial
+ * 
+ * Renders the primary navigation drawer for the admin panel.
+ * Handles theme switching and mobile drawer state.
+ * @param string|null $currentPage Used to highlight the active menu item.
+ */
 function renderAdminSidebar($currentPage = null) {
     $pages = [
         'songs'        => ['url' => '/admin/panel',          'icon' => 'library_music',      'label' => 'Songs'],
@@ -10,7 +17,9 @@ function renderAdminSidebar($currentPage = null) {
         'credentials'  => ['url' => '/admin/credentials',    'icon' => 'admin_panel_settings','label' => 'Credentials'],
     ];
     ?>
-    <script>(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    
+    <!-- Ensure admin.js is loaded for sidebar functionality -->
+    <script src="/js/admin.js"></script>
 
     <div class="nav-overlay" id="navOverlay"></div>
 
@@ -52,62 +61,6 @@ function renderAdminSidebar($currentPage = null) {
         <img src="/img/logo.svg" alt="Duargan" class="mobile-header-logo">
     </header>
 
-    <script>
-    (function () {
-        function applyTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            var icon  = document.getElementById('themeIcon');
-            var label = document.getElementById('themeLabel');
-            if (!icon) return;
-            if (theme === 'dark') {
-                icon.textContent  = 'light_mode';
-                label.textContent = 'Light Mode';
-            } else {
-                icon.textContent  = 'dark_mode';
-                label.textContent = 'Dark Mode';
-            }
-        }
-
-        applyTheme(localStorage.getItem('theme') || 'dark');
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var sidebar      = document.getElementById('adminSidebar');
-            var overlay      = document.getElementById('navOverlay');
-            var hamburgerBtn = document.getElementById('hamburgerBtn');
-            var closeBtn     = document.getElementById('sidebarCloseBtn');
-            var themeToggle  = document.getElementById('themeToggle');
-
-            function openSidebar() {
-                sidebar.classList.add('open');
-                overlay.classList.add('visible');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeSidebar() {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('visible');
-                document.body.style.overflow = '';
-            }
-
-            hamburgerBtn.addEventListener('click', openSidebar);
-            closeBtn.addEventListener('click', closeSidebar);
-            overlay.addEventListener('click', closeSidebar);
-
-            sidebar.querySelectorAll('.admin-nav-item').forEach(function (link) {
-                link.addEventListener('click', function () {
-                    if (window.innerWidth <= 768) closeSidebar();
-                });
-            });
-
-            themeToggle.addEventListener('click', function () {
-                var current = document.documentElement.getAttribute('data-theme');
-                var next    = current === 'dark' ? 'light' : 'dark';
-                localStorage.setItem('theme', next);
-                applyTheme(next);
-            });
-        });
-    })();
-    </script>
     <?php
 }
 ?>

@@ -1,3 +1,10 @@
+<?php
+/**
+ * Music Platform Management Form
+ * 
+ * Form for creating and editing streaming/purchase platforms with custom SVG icons.
+ */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/admin.js" defer></script>
 </head>
 <body>
 <?php
@@ -38,7 +46,7 @@ renderAdminSidebar($currentAdminPage);
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                 <div class="material-form-group with-help">
-                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($platform['name']) : '' ?>" placeholder=" " required oninput="generateSlug(this.value)">
+                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($platform['name']) : '' ?>" placeholder=" " required oninput="AdminUtils.generateSlug(this.value, 'slug')">
                     <label class="material-form-label" for="name">Platform Name *</label>
                 </div>
                 <p class="form-help">e.g., Spotify, Apple Music</p>
@@ -82,7 +90,7 @@ renderAdminSidebar($currentAdminPage);
 
                 <div class="form-section">
                     <h3>SVG Icon *</h3>
-                    <textarea name="icon_svg" id="icon_svg" class="form-textarea" rows="8" placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">...' required oninput="updateSvgPreview()"><?= $isEdit ? htmlspecialchars($platform['icon_svg']) : '' ?></textarea>
+                    <textarea name="icon_svg" id="icon_svg" class="form-textarea" rows="8" placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">...' required oninput="AdminUtils.updateSvgPreview('icon_svg', 'svgPreview')"><?= $isEdit ? htmlspecialchars($platform['icon_svg']) : '' ?></textarea>
                     <div class="svg-preview-with-color" style="margin-top: 1rem;">
                         <div class="svg-color-preview" id="svgPreview" style="color: <?= $isEdit ? htmlspecialchars($platform['color']) : '#666666' ?>;">
                             <?= $isEdit ? $platform['icon_svg'] : '<span class="material-icons">image</span>' ?>
@@ -103,30 +111,17 @@ renderAdminSidebar($currentAdminPage);
     </main>
 </div>
 <script>
-function generateSlug(name) {
-    let slugInput = document.getElementById('slug');
-    if (slugInput.value === '' || slugInput.value === '<?= $isEdit ? $platform['slug'] : '' ?>') {
-        let slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-        slugInput.value = slug;
-    }
-}
+    /**
+     * Updates the UI color preview based on the hex picker.
+     * @param {string} hex Hex color code.
+     */
 function updateColorPreview(hex) {
     document.getElementById('colorValue').textContent = hex;
     document.getElementById('colorPreviewCircle').style.backgroundColor = hex;
     document.getElementById('svgPreview').style.color = hex;
 }
-function updateSvgPreview() {
-    let svgCode = document.getElementById('icon_svg').value;
-    let previewDiv = document.getElementById('svgPreview');
-    if (svgCode.trim()) {
-        previewDiv.innerHTML = svgCode;
-    } else {
-        previewDiv.innerHTML = '<span class="material-icons">image</span>';
-    }
-}
-// Initialize preview on load
 document.addEventListener('DOMContentLoaded', function() {
-    updateSvgPreview();
+    AdminUtils.updateSvgPreview('icon_svg', 'svgPreview');
 });
 </script>
 </body>

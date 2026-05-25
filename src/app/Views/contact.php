@@ -1,3 +1,10 @@
+<?php
+/**
+ * Contact Page View
+ * 
+ * Provides direct contact methods and social links.
+ */
+?>
 <main class="main-container">
     <section class="contact-info">
         <h2>Get In Touch</h2>

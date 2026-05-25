@@ -1,3 +1,10 @@
+<?php
+/**
+ * Admin Dashboard View
+ * 
+ * Main management interface for songs. Allows editing and deletion of existing tracks.
+ */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/admin.js" defer></script>
 </head>
 <body>
 <?php

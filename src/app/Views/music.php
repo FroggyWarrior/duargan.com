@@ -1,3 +1,10 @@
+<?php
+/**
+ * Music Library View
+ * 
+ * Displays the full discography with dynamic client-side filtering and sorting.
+ */
+?>
 <main class="main-container">
     <section class="music-library">
         <h1 style="text-align: center;">All My Music</h1>
@@ -49,7 +56,7 @@
                 $genre_ids = [];
                 $genre_names = [];
                 $genre_slugs = [];
-                
+                // Prepare arrays from GROUP_CONCAT database results
                 if (!empty($track['genre_ids'])) {
                     $genre_ids = explode(',', $track['genre_ids']);
                 }
@@ -76,8 +83,7 @@
                     <div class="music-info">
                         <h3><?php echo htmlspecialchars($track['title']); ?></h3>
                         <div class="music-tags">
-                            <?php 
-                            // Display genre tags
+                            <?php // Display genre tags 
                             foreach ($genre_names as $index => $genre_name): 
                                 if (!empty(trim($genre_name)) && isset($genre_slugs[$index])): ?>
                                     <span class="music-tag genre-tag" data-genre="<?php echo htmlspecialchars($genre_slugs[$index]); ?>">
@@ -85,8 +91,7 @@
                                     </span>
                                 <?php endif;
                             endforeach; 
-                            
-                            // Display type tag
+                            // Display type tag 
                             if (!empty(trim($track['type_name']))): ?>
                                 <span class="music-tag type-tag" data-type="<?php echo htmlspecialchars(trim($track['type_slug'])); ?>">
                                     <?php echo htmlspecialchars(ucfirst(trim($track['type_name']))); ?>
@@ -130,11 +135,16 @@
         const sortBtn     = document.getElementById('sortBtn');
         const sortLabel   = document.getElementById('sortLabel');
         const sortIcon    = sortBtn.querySelector('.material-icons');
-
+        
+        /** @type {{genre: string, type: string}} Current active filter state */
         let activeFilters = { genre: 'all', type: 'all' };
-        let sortOrder     = 'desc'; // 'desc' = newest first, 'asc' = oldest first
+        
+        /** @type {string} Sort direction: 'desc' (Newest) or 'asc' (Oldest) */
+        let sortOrder     = 'desc';
 
-        // ── Sort ────────────────────────────────────────────────────────────
+        /**
+         * Reorders cards in the DOM based on the data-date attribute.
+         */
         function sortCards() {
             const cards = Array.from(musicGrid.querySelectorAll('.music-card'));
             cards.sort(function(a, b) {
@@ -145,6 +155,9 @@
             cards.forEach(function(card) { musicGrid.appendChild(card); });
         }
 
+        /**
+         * Handles the sort button click event.
+         */
         sortBtn.addEventListener('click', function() {
             sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
 
@@ -159,10 +172,12 @@
             }
 
             sortCards();
-            applyFilters(); // recount visible after reorder
+            applyFilters();
         });
 
-        // ── Filters ─────────────────────────────────────────────────────────
+        /**
+         * Initializes filter chip click events.
+         */
         filterChips.forEach(function(chip) {
             chip.addEventListener('click', function() {
                 const filterType  = this.getAttribute('data-filter');
@@ -178,6 +193,10 @@
             });
         });
 
+        /**
+         * Applies visibility logic to cards based on the selected filters.
+         * Updates result count and visibility of the "no results" message.
+         */
         function applyFilters() {
             const cards = musicGrid.querySelectorAll('.music-card');
             let visibleCount = 0;
@@ -217,7 +236,9 @@
         }
     });
 
-    // ── Filter toggle animation ──────────────────────────────────────────────
+    /**
+     * Handles the filter section accordion animation.
+     */
     const filterToggle = document.getElementById('filterToggle');
     const musicFilters = document.querySelector('.music-filters');
 

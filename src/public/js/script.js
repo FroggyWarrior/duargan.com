@@ -1,12 +1,19 @@
-// Theme toggle functionality
+/**
+ * Global Site Script
+ * 
+ * Handles shared interface functionality including theme management,
+ * responsive navigation, and global UI updates.
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    const themeToggles = document.querySelectorAll('.theme-toggle, .mobile-theme-toggle');
     
-    // Check for saved theme preference or default to dark
+    /** --- 1. Theme Management --- */
+    const themeToggles = document.querySelectorAll('.theme-toggle, .mobile-theme-toggle');
     const currentTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', currentTheme);
     
-    // Update icon based on current theme
+    /**
+     * Updates the theme toggle icons based on the current root data-theme attribute.
+     */
     function updateThemeIcons() {
         const theme = document.documentElement.getAttribute('data-theme');
         themeToggles.forEach(toggle => {
@@ -20,10 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
     updateThemeIcons();
     
-    // Add event listeners to all theme toggles
     themeToggles.forEach(toggle => {
         toggle.addEventListener('click', function() {
             let theme = document.documentElement.getAttribute('data-theme');
@@ -38,14 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Automatically update copyright year
+    /** --- 2. Dynamic Content --- */
     const currentYear = new Date().getFullYear();
     const yearElement = document.getElementById('footerYear');
     if (yearElement) {
         yearElement.textContent = currentYear;
     }
 
-    // Mobile menu functionality
+    /** --- 3. Mobile Navigation --- */
     const burgerMenu = document.getElementById('burgerMenu');
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileMenuClose = document.getElementById('mobileMenuClose');
@@ -54,16 +59,16 @@ document.addEventListener('DOMContentLoaded', function() {
         burgerMenu.addEventListener('click', function() {
             mobileMenu.classList.add('active');
             burgerMenu.setAttribute('aria-expanded', 'true');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+            document.body.style.overflow = 'hidden';
         });
         
         mobileMenuClose.addEventListener('click', function() {
             mobileMenu.classList.remove('active');
             burgerMenu.setAttribute('aria-expanded', 'false');
-            document.body.style.overflow = 'auto'; // Restore scrolling
+            document.body.style.overflow = 'auto';
         });
         
-        // Close menu when clicking on a link
+        // Auto-close menu when navigating
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', function() {
@@ -73,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
-        // Close menu when clicking outside
+        // Backdrop click to close
         mobileMenu.addEventListener('click', function(e) {
             if (e.target === mobileMenu) {
                 mobileMenu.classList.remove('active');

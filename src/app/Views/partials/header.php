@@ -1,4 +1,10 @@
-<?php use App\Core\ViewHelper; ?>
+<?php 
+/**
+ * Public Site Header Partial
+ * 
+ * Renders the main navigation, logo, social links, and mobile menu.
+ */
+use App\Core\ViewHelper; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

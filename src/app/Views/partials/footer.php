@@ -1,4 +1,10 @@
-<?php use App\Core\ViewHelper; ?>
+<?php 
+/**
+ * Public Site Footer Partial
+ * 
+ * Displays the logo, active social links, and license information.
+ */
+use App\Core\ViewHelper; ?>
 <footer>
     <div class="footer-content">
         <a href="/">

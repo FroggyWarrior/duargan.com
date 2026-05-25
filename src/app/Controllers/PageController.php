@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Core\Database;
+use App\Models\AnnouncementModel;
 use App\Models\SongModel;
 
 /**
@@ -15,11 +16,12 @@ class PageController extends BaseController {
      * @return void
      */
     public function index() {
-        $db = \App\Core\Database::getInstance()->getConnection();
-        $ann_stmt = $db->query("SELECT title, background_color, text FROM announcement WHERE id = 1 AND is_active = 1 LIMIT 1");
+        // Use the Model instead of direct DB connection for better MVC separation
+        $announcementModel = new AnnouncementModel(false);
+        $announcement = $announcementModel->getActive();
         
         /** @var SongModel $songModel */
-        $songModel = new \App\Models\SongModel();
+        $songModel = new SongModel();
         
         // Get the official releases
         $officialReleases = $songModel->getOfficialReleases();
@@ -31,7 +33,7 @@ class PageController extends BaseController {
         $this->render('home', [
             'pageTitle' => "Duargan - Music Producer",
             'currentPage' => 'index',
-            'announcement' => $ann_stmt->fetch(),
+            'announcement' => $announcement,
             'officialReleases' => $officialReleases,
             'latestRelease' => $latestRelease
         ]);
@@ -62,14 +64,30 @@ class PageController extends BaseController {
         // Generate share buttons
         $shareButtons = $this->generateShareButtons($song);
 
+        // Determine Back Button destination and label based on referrer
+        $backUrl = '/music';
+        $backLabel = 'Back to All Music';
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $refererPath = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
+            if ($refererPath === '/' || $refererPath === '/index.php') {
+                $backUrl = '/';
+                $backLabel = 'Back to Home';
+            }
+        }
+
+        // Enhanced SEO: Provide specific description and image for social sharing
         $this->render('song', [
             'pageTitle'   => $song['title'] . " | Duargan",
+            'pageDescription' => "Listen to " . $song['title'] . " by Duargan. Released on " . $song['release_date'],
+            'pageImage'   => $song['cover_image_url'],
             'currentPage' => 'music',
             'song'        => $song,
             'song_genres' => $song_genres,
             'song_platforms' => $song_platforms,
             'otherSongs'  => $otherSongs,
-            'shareButtons'=> $shareButtons
+            'shareButtons'=> $shareButtons,
+            'backUrl'     => $backUrl,
+            'backLabel'   => $backLabel
         ]);
     }
 
@@ -81,7 +99,7 @@ class PageController extends BaseController {
      */
     private function generateShareButtons($song) {
         $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-        $song_url = $base_url . "/song.php?id=" . $song['id'];
+        $song_url = $base_url . "/song?id=" . $song['id'];
         $encoded_url = urlencode($song_url);
         $encoded_title = urlencode("Listen to \"" . $song['title'] . "\" by Duargan");
         $encoded_text = urlencode("Check out \"" . $song['title'] . "\" by Duargan");

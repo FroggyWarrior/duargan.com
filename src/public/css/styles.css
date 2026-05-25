@@ -816,6 +816,22 @@ footer a {
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
+/* Stretched Link Pattern: makes the whole card clickable while allowing sub-links */
+.stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    content: "";
+}
+
+.music-card h3 a {
+    color: white;
+    text-decoration: none;
+}
+
 .music-card-content {
     flex: 1;
     display: flex;
@@ -877,6 +893,8 @@ footer a {
     flex-shrink: 0;
     padding-top: 0.75rem;
     flex-wrap: wrap; /* Allow wrapping */
+    position: relative;
+    z-index: 3; /* Ensures platform buttons stay clickable over the stretched link */
 }
 
 .music-platform-btn {

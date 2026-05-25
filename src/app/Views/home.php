@@ -60,7 +60,7 @@
     <section class="singles-list">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <h2>Official Releases</h2>
-            <a href="music.php" class="view-all-link" style="color: var(--primary); text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+            <a href="/music" class="view-all-link" style="color: var(--primary); text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
                 <span>View All Music</span>
                 <span class="material-icons" style="font-size: 18px;" aria-hidden="true">arrow_forward</span>
             </a>
@@ -69,18 +69,14 @@
             <?php foreach ($officialReleases as $index => $single): 
                 if ($index === 0) continue;
             ?>
-            <div class="music-card" 
-                onclick="window.location.href='song.php?id=<?php echo $single['id']; ?>'" 
-                onkeydown="if(event.key === 'Enter') window.location.href='song.php?id=<?php echo $single['id']; ?>'"
-                style="cursor: pointer;" 
-                tabindex="0" 
-                role="link" 
-                aria-label="View details for <?php echo htmlspecialchars($single['title']); ?>">
+            <div class="music-card">
                 <div class="music-card-bg" style="background-image: url('<?php echo $single['cover_image_url']; ?>')"></div>
                 <img src="<?php echo $single['cover_image_url']; ?>" alt="Cover art for <?php echo htmlspecialchars($single['title']); ?>" class="music-cover">
                 <div class="music-card-content">
                     <div class="music-info">
-                        <h3><?php echo htmlspecialchars($single['title']); ?></h3>
+                        <h3>
+                            <a href="/song?id=<?php echo $single['id']; ?>" class="stretched-link"><?php echo htmlspecialchars($single['title']); ?></a>
+                        </h3>
                         <p>Released: <?php echo htmlspecialchars($single['release_date']); ?></p>
                     </div>
                     <div class="music-platforms">

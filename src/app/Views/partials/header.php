@@ -11,6 +11,17 @@ use App\Core\ViewHelper; ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($pageTitle ?? 'Duargan'); ?> | Duargan</title>
+    
+    <!-- Standard SEO -->
+    <meta name="description" content="<?php echo htmlspecialchars($pageDescription ?? $page_description); ?>">
+    <meta name="keywords" content="<?php echo htmlspecialchars($meta_keywords); ?>">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?php echo htmlspecialchars($pageTitle ?? 'Duargan'); ?>">
+    <meta property="og:description" content="<?php echo htmlspecialchars($pageDescription ?? $page_description); ?>">
+    <meta property="og:image" content="<?php echo isset($pageImage) ? (strpos($pageImage, 'http') === 0 ? $pageImage : (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . ltrim($pageImage, '/')) : ''; ?>">
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">

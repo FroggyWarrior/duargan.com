@@ -68,12 +68,6 @@
                 }
             ?>
             <div class="music-card" 
-                onclick="window.location.href='/song?id=<?php echo $track['id']; ?>'" 
-                onkeydown="if(event.key === 'Enter') window.location.href='/song?id=<?php echo $track['id']; ?>'"
-                style="cursor: pointer;" 
-                tabindex="0" 
-                role="link" 
-                aria-label="View details for <?php echo htmlspecialchars($track['title']); ?>"
                 data-genres="<?php echo !empty($genre_slugs) ? htmlspecialchars(implode(' ', $genre_slugs)) : ''; ?>" 
                 data-type="<?php echo htmlspecialchars($track['type_slug']); ?>"
                 data-date="<?php $ts = strtotime($track['release_date']); echo $ts ? date('Y-m-d', $ts) : ''; ?>">
@@ -81,7 +75,9 @@
                 <img src="<?php echo $track['cover_image_url']; ?>" alt="Cover art for <?php echo htmlspecialchars($track['title']); ?>" class="music-cover">
                 <div class="music-card-content">
                     <div class="music-info">
-                        <h3><?php echo htmlspecialchars($track['title']); ?></h3>
+                        <h3>
+                            <a href="/song?id=<?php echo $track['id']; ?>" class="stretched-link"><?php echo htmlspecialchars($track['title']); ?></a>
+                        </h3>
                         <div class="music-tags">
                             <?php // Display genre tags 
                             foreach ($genre_names as $index => $genre_name): 

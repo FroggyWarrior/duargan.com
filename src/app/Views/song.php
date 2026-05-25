@@ -8,9 +8,9 @@
 ?>
 <main class="main-container">
     <section class="song-detail">
-        <a href="/music" class="back-button">
+        <a href="<?= $backUrl ?>" class="back-button">
             <span class="material-icons" style="font-size: 20px;">arrow_back</span>
-            Back to All Music
+            <?= $backLabel ?>
         </a>
 
         <div class="song-detail-content">
@@ -84,15 +84,16 @@
                 $other_genre_slugs = array_map(function($g) { return $g['slug']; }, $other_song['genres']);
                 $other_genre_names = array_map(function($g) { return $g['name']; }, $other_song['genres']);
             ?>
-            <div class="music-card" 
-                onclick="window.location.href='/song?id=<?= $other_song['id'] ?>'" 
+            <div class="music-card"
                 data-genres="<?= !empty($other_genre_slugs) ? htmlspecialchars(implode(' ', $other_genre_slugs)) : '' ?>" 
                 data-type="<?= htmlspecialchars($other_song['type_slug']) ?>">
                 <div class="music-card-bg" style="background-image: url('<?= $other_song['cover_image_url'] ?>')"></div>
                 <img src="<?= $other_song['cover_image_url'] ?>" alt="<?= htmlspecialchars($other_song['title']) ?>" class="music-cover">
                 <div class="music-card-content">
                     <div class="music-info">
-                        <h3><?= htmlspecialchars($other_song['title']) ?></h3>
+                        <h3>
+                            <a href="/song?id=<?= $other_song['id'] ?>" class="stretched-link"><?= htmlspecialchars($other_song['title']) ?></a>
+                        </h3>
                         <div class="music-tags">
                             <?php foreach ($other_song['genres'] as $genre): ?>
                                 <span class="music-tag genre-tag" data-genre="<?= htmlspecialchars($genre['slug']) ?>">

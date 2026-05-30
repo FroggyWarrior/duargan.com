@@ -68,7 +68,50 @@
                 applyAdminTheme(next);
             });
         }
+
+        /**
+         * Intercepts submissions of forms marked for deletion confirmation.
+         */
+        document.addEventListener('submit', async function (e) {
+            const form = e.target;
+            if (form && (form.classList.contains('delete-form') || form.classList.contains('confirm-form'))) {
+                e.preventDefault();
+                const isDelete = form.classList.contains('delete-form');
+                
+                const title = form.getAttribute('data-confirm-title') || (isDelete ? 'Confirm Deletion' : 'Confirm Action');
+                const message = form.getAttribute('data-confirm-message') || (isDelete ? 'Are you sure you want to delete this item? This action cannot be undone.' : 'Are you sure you want to proceed?');
+                const btnText = form.getAttribute('data-confirm-btn') || (isDelete ? 'Delete' : 'Confirm');
+
+                const confirmed = await showCustomConfirm(title, message, btnText);
+                if (confirmed) {
+                    form.submit();
+                }
+            }
+        });
     });
+
+    /**
+     * Creates and displays a Material Design 3 styled confirmation modal.
+     */
+    function showCustomConfirm(title, message, confirmBtnText = 'Confirm') {
+        return new Promise((resolve) => {
+            const modalHtml = `
+                <div class="modal-overlay" id="customConfirmModal">
+                    <div class="modal">
+                        <h2>${title}</h2>
+                        <p>${message}</p>
+                        <div class="modal-actions">
+                            <button type="button" class="btn btn-cancel" id="modalCancel">Cancel</button>
+                            <button type="button" class="btn btn-confirm" id="modalConfirm">${confirmBtnText}</button>
+                        </div>
+                    </div>
+                </div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            const modal = document.getElementById('customConfirmModal');
+            document.getElementById('modalCancel').onclick = () => { modal.remove(); resolve(false); };
+            document.getElementById('modalConfirm').onclick = () => { modal.remove(); resolve(true); };
+        });
+    }
 })();
 
 /**

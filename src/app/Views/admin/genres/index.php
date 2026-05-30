@@ -51,7 +51,7 @@ renderAdminSidebar($currentAdminPage);
                                 <span class="material-icons"><?= $genre['is_active'] ? 'visibility_off' : 'visibility' ?></span>
                             </button>
                         </form>
-                        <form action="/admin/genres/delete/<?= $genre['id'] ?>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                        <form action="/admin/genres/delete/<?= $genre['id'] ?>" method="POST" style="display:inline;" class="delete-form">
                             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                             <button type="submit" class="btn btn-delete"><span class="material-icons">delete</span></button>
                         </form>

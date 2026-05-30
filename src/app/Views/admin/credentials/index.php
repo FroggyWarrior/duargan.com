@@ -44,7 +44,10 @@ renderAdminSidebar($currentAdminPage);
                             2FA is currently ENABLED
                         </p>
                     </div>
-                    <form method="POST" action="/admin/credentials/disable2fa">
+                    <form method="POST" action="/admin/credentials/disable2fa" class="confirm-form" 
+                          data-confirm-title="Disable 2FA" 
+                          data-confirm-message="Are you sure you want to disable Two-Factor Authentication? Your account will be less secure." 
+                          data-confirm-btn="Disable">
                         <!-- CSRF Protection -->
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <button type="submit" class="btn btn-delete" style="padding: 0.75rem 1.5rem;">

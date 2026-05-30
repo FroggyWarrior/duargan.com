@@ -57,7 +57,7 @@ renderAdminSidebar($currentAdminPage);
                                 <span class="material-icons"><?= $platform['is_active'] ? 'visibility_off' : 'visibility' ?></span>
                             </button>
                         </form>
-                        <form action="/admin/social-media/delete/<?= $platform['id'] ?>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                        <form action="/admin/social-media/delete/<?= $platform['id'] ?>" method="POST" style="display:inline;" class="delete-form">
                             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                             <button type="submit" class="btn btn-delete"><span class="material-icons">delete</span></button>
                         </form>

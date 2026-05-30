@@ -94,7 +94,7 @@ class DashboardController extends BaseAdminController
         // Validation
         $errors = $this->validateSongData($title, $releaseDate, $typeId, $selectedGenres, $coverImageUrl, false);
         if (!empty($errors)) {
-            $_SESSION['form_errors'] = $errors;
+            $_SESSION['form_errors'] = array_merge($_SESSION['form_errors'] ?? [], $errors);
             $_SESSION['old_input'] = $_POST;
             $this->redirect('/admin/songs/create');
             return;
@@ -204,7 +204,7 @@ class DashboardController extends BaseAdminController
         // Validation
         $errors = $this->validateSongData($title, $releaseDate, $typeId, $selectedGenres, $coverImageUrl, true);
         if (!empty($errors)) {
-            $_SESSION['form_errors'] = $errors;
+            $_SESSION['form_errors'] = array_merge($_SESSION['form_errors'] ?? [], $errors);
             $_SESSION['old_input'] = $_POST;
             $this->redirect("/admin/songs/edit/{$id}");
             return;
@@ -301,7 +301,12 @@ class DashboardController extends BaseAdminController
         if (empty($genres)) {
             $errors[] = 'Please select at least one genre.';
         }
-        if (!$isEdit && empty($cover)) {
+
+        // Check if an upload was actually attempted
+        $fileUploaded = isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] !== UPLOAD_ERR_NO_FILE;
+        $urlProvided = !empty($_POST['cover_image_url']);
+
+        if (!$isEdit && empty($cover) && !$fileUploaded && !$urlProvided) {
             $errors[] = 'Cover image is required for new songs. Please upload a file or provide an image URL.';
         }
         return $errors;
@@ -342,6 +347,19 @@ class DashboardController extends BaseAdminController
             mkdir($uploadDir, 0755, true);
         }
 
+        // Verify the directory is writable before attempting to process the image
+        if (!is_writable($uploadDir)) {
+            $_SESSION['form_errors'][] = 'The server does not have permission to write to the covers directory. Please check folder permissions.';
+            return null;
+        }
+
+        // Verify the uploaded file is actually an image
+        $imageInfo = getimagesize($file['tmp_name']);
+        if ($imageInfo === false) {
+            $_SESSION['form_errors'][] = 'The uploaded file is not a valid image or is corrupted.';
+            return null;
+        }
+
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         if (!in_array($ext, $allowed)) {
@@ -359,7 +377,7 @@ class DashboardController extends BaseAdminController
         if ($this->processImage($file['tmp_name'], $target, $targetExt)) {
             return 'img/covers/' . $filename;
         } else {
-            $_SESSION['form_errors'][] = 'Failed to process image. Please try a different file.';
+            $_SESSION['form_errors'][] = 'Failed to process image after initial validation. This might indicate an issue with the GD library or a severely malformed image. Please check server logs for more details.';
             return null;
         }
     }
@@ -375,10 +393,13 @@ class DashboardController extends BaseAdminController
      * @param int $quality Compression quality (0-100).
      * @return bool True on success, false on failure.
      */
-    private function processImage($sourcePath, $destinationPath, $format = 'webp', $maxDim = 900, $quality = 85)
+    private function processImage($sourcePath, $destinationPath, $format = 'webp', $maxDim = 900, $quality = 90)
     {
         if (!extension_loaded('gd')) {
-            return move_uploaded_file($sourcePath, $destinationPath);
+            if (!move_uploaded_file($sourcePath, $destinationPath)) {
+                error_log("Failed to move uploaded file (GD not loaded): $sourcePath to $destinationPath");
+            }
+            return true; // Successfully moved the file, or failed and logged
         }
 
         $info = getimagesize($sourcePath);
@@ -394,7 +415,10 @@ class DashboardController extends BaseAdminController
             default: return false;
         }
 
-        if (!$src) return false;
+        if (!$src) {
+            error_log("Failed to create image resource from: $sourcePath (type: $type)");
+            return false;
+        }
 
         // Calculate aspect-ratio-friendly dimensions
         $newWidth = $width;
@@ -426,6 +450,13 @@ class DashboardController extends BaseAdminController
             $success = imagejpeg($dst, $destinationPath, $quality);
         }
 
+        if ($success) {
+            // Ensure the file is readable by the system and owner
+            chmod($destinationPath, 0644);
+        } else {
+            error_log("Failed to save processed image to: $destinationPath (format: $format)");
+        }
+        
         imagedestroy($src);
         imagedestroy($dst);
 

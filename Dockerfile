@@ -1,8 +1,14 @@
 # Use PHP with Apache, perfectly mimicking standard shared hosting
 FROM php:8.2-apache
 
-# Install PDO MySQL extensions so PHP can talk to MariaDB
-RUN docker-php-ext-install pdo pdo_mysql
+# Install system dependencies for GD and image processing
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql
 
 # Enable Apache mod_rewrite (essential for MVC routing to index.php)
 RUN a2enmod rewrite
@@ -20,3 +26,6 @@ RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/apache2.conf \
     && echo "    AllowOverride All" >> /etc/apache2/apache2.conf \
     && echo "    Require all granted" >> /etc/apache2/apache2.conf \
     && echo "</Directory>" >> /etc/apache2/apache2.conf
+
+# Set the web server user (www-data) as the owner of the application directory
+RUN chown -R www-data:www-data /var/www/html

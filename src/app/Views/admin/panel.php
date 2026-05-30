@@ -66,7 +66,7 @@ renderAdminSidebar($currentAdminPage);
                 </div>
                 <div class="song-actions">
                     <a href="/admin/songs/edit/<?= $song['id'] ?>" class="btn btn-edit"><span class="material-icons">edit</span></a>
-                    <form action="/admin/songs/delete/<?= $song['id'] ?>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                    <form action="/admin/songs/delete/<?= $song['id'] ?>" method="POST" style="display:inline;" class="delete-form">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <button type="submit" class="btn btn-delete">
                             <span class="material-icons">delete</span>

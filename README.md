@@ -91,7 +91,7 @@ If you plan to upload very large high-res covers, ensure your hosting provider o
 
 ---
 
-## 🛡 Security
+## �🛡 Security
 *   **CSRF Protection:** All administrative POST requests require a valid token.
 *   **2FA:** It is highly recommended to enable 2FA in the "Credentials" section of the admin panel immediately after setup.
 *   **Dual-User DB:** The app uses separate database users for reading (public) and writing (admin) to minimize the impact of potential SQL injections.
@@ -108,5 +108,3 @@ This project is licensed under the **GPL-3.0 License**. You are free to fork, mo
 ## 🤝 Contributing
 
 Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request.
-
-*Developed for the official Duargan website.*

@@ -29,14 +29,23 @@ While this instance serves as Duargan's portfolio, the project is built as a reu
 
 ---
 
-## 🚀 Quick Start (Development Setup)
+## 🚀 Getting Started
 
-This project is fully containerized with Docker for an instant development environment.
+### 🐳 Development with Docker
 
-### Prerequisites
+This project is fully containerized for a "zero-config" development experience.
+
+#### How the containers work:
+*   **`docker-compose.yml`**: Orchestrates three interconnected services:
+    *   **`web`**: The main application server. It builds from the local `Dockerfile`, maps the web port, and mounts the `./src` folder as a volume for real-time code updates. It also injects a custom `php.ini` to override default upload limits.
+    *   **`db`**: A MariaDB container that persists data in `./data/mysql`. It automatically executes `mysql/init.sql` on the first run to bootstrap the database schema.
+    *   **`phpmyadmin`**: A GUI for database management accessible at port 8080.
+*   **`Dockerfile`**: (Located in the root) This file defines the server environment. It uses an official PHP-Apache image, installs the `GD` library (required for the CMS's smart image resizing), enables `pdo_mysql` for database communication, and activates Apache's `mod_rewrite` to handle the MVC routing.
+
+#### Prerequisites
 *   [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
 
-### Installation
+#### Installation
 
 1.  **Clone the repository:**
     ```bash
@@ -56,6 +65,20 @@ This project is fully containerized with Docker for an instant development envir
     *   Public Site: `http://localhost`
     *   Admin Panel: `http://localhost/admin`
     *   Database (phpMyAdmin): `http://localhost:8080`
+
+### 🌐 Deployment (Non-Docker)
+
+If you prefer to deploy on a traditional shared hosting service (CPanel) or a standard VPS:
+
+1.  **Requirements:** 
+    *   PHP 8.1+ with `gd`, `pdo_mysql`, and `mbstring` extensions.
+    *   MySQL or MariaDB server.
+    *   Apache with `mod_rewrite` enabled.
+2.  **Upload:** Move the contents of the `src/` directory to your server's root.
+3.  **Document Root:** Configure your web server to point its Document Root to the `/public` directory. **Never point it to the project root**, as this would expose your source code and `.env` files.
+4.  **Database:** Create a database and import the `mysql/init.sql` file.
+5.  **Environment:** Create a `.env` file in the root (copy from `.env.example`) and fill in your production database credentials.
+6.  **Permissions:** Ensure the `public/img/covers/` directory is writable by the web server user (`www-data`).
 
 ---
 
@@ -91,7 +114,20 @@ If you plan to upload very large high-res covers, ensure your hosting provider o
 
 ---
 
-## �🛡 Security
+## 📅 Roadmap / To-Do List
+
+The project is actively evolving. Here are the planned features:
+- [ ] **Albums Support:** Ability to group tracks into EPs and Albums.
+- [ ] **UI Overhaul:** Migration to **Material 3 Expressive** with enhanced transparency effects and smooth motion transitions.
+- [ ] **Improved Workflow:** Add new song types and genres directly from the song creation form without leaving the page.
+- [ ] **Smart Onboarding:** Automatic setup wizard for the admin panel if no database is detected, making the CMS truly plug-and-play.
+- [ ] **Dynamic Content:** Make 100% of the public site content (bio, contact info) editable via the admin dashboard.
+
+💡 **Have a suggestion?** We want to hear from you! Please feel free to open an issue to ask for new features or report bugs.
+
+---
+
+## 🔒 Security
 *   **CSRF Protection:** All administrative POST requests require a valid token.
 *   **2FA:** It is highly recommended to enable 2FA in the "Credentials" section of the admin panel immediately after setup.
 *   **Dual-User DB:** The app uses separate database users for reading (public) and writing (admin) to minimize the impact of potential SQL injections.

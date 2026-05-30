@@ -5,9 +5,8 @@ This repository contains the professional, high-performance source code used for
 
 While this instance serves as Duargan's portfolio, the project is built as a reusable and SEO-optimized CMS engine designed specifically for electronic artists and producers to manage their discography, announcements, and social presence.
 
-![Version](https://img.shields.io/badge/version-1.0.0-purple.svg)
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
-![Tech](https://img.shields.io/badge/tech-PHP%20|%20MariaDB%20|%20Docker-orange.svg)
+![Tech](https://img.shields.io/badge/tech-PHP%20|%20MariaDB%20|%20Javascript%20|%20CSS%20|%20Docker-orange.svg)
 
 ---
 
@@ -43,13 +42,13 @@ This project is fully containerized for a "zero-config" development experience.
 *   **`Dockerfile`**: (Located in the root) This file defines the server environment. It uses an official PHP-Apache image, installs the `GD` library (required for the CMS's smart image resizing), enables `pdo_mysql` for database communication, and activates Apache's `mod_rewrite` to handle the MVC routing.
 
 #### Prerequisites
-*   [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
+*   [Docker] installed.
 
 #### Installation
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/YourUsername/your-repo-name.git
+    git clone https://github.com/FroggyWarrior/duargan.com.git
     cd your-repo-name
     ```
 
@@ -122,6 +121,8 @@ The project is actively evolving. Here are the planned features:
 - [ ] **Improved Workflow:** Add new song types and genres directly from the song creation form without leaving the page.
 - [ ] **Smart Onboarding:** Automatic setup wizard for the admin panel if no database is detected, making the CMS truly plug-and-play.
 - [ ] **Dynamic Content:** Make 100% of the public site content (bio, contact info) editable via the admin dashboard.
+- [ ] **Customizable SEO** Edit SEO info directly from the Admin Panel.
+- [ ] **Multi-selection editing** Change the genre, release date or song type of multiple songs at once.
 
 💡 **Have a suggestion?** We want to hear from you! Please feel free to open an issue to ask for new features or report bugs.
 
@@ -144,3 +145,7 @@ This project is licensed under the **GPL-3.0 License**. You are free to fork, mo
 ## 🤝 Contributing
 
 Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request.
+
+---
+
+Made with ❤️ by FroggyWarrior

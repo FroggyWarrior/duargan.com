@@ -53,10 +53,10 @@ renderAdminSidebar($currentAdminPage);
 
                 <!-- Release Date -->
                 <div class="material-form-group with-help">
-                    <input type="text" id="release_date" name="release_date" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['release_date'] : ($_SESSION['old_input']['release_date'] ?? '')) ?>" placeholder=" " required aria-required="true" aria-describedby="date_help">
+                    <input type="date" id="release_date" name="release_date" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['release_date'] : ($_SESSION['old_input']['release_date'] ?? '')) ?>" required aria-required="true" aria-describedby="date_help">
                     <label class="material-form-label">Release Date *</label>
                 </div>
-                <p id="date_help" class="form-help">Format: e.g., June 15, 2023</p>
+                <p id="date_help" class="form-help">Select the official release date</p>
 
                 <!-- Cover Image Upload -->
                 <div class="file-upload-group">

@@ -22,7 +22,7 @@
             <h2>
                 <a href="/song?id=<?php echo $latestRelease['id']; ?>" class="stretched-link" style="color: white; text-decoration: none; display: block;"><?php echo htmlspecialchars($latestRelease['title']); ?></a>
             </h2>
-            <p>Latest single released on <?php echo htmlspecialchars($latestRelease['release_date']); ?></p>
+            <p>Latest single released on <?php echo date("F j, Y", strtotime($latestRelease['release_date'])); ?></p>
             <div class="platform-buttons" aria-label="Streaming platforms" style="position: relative; z-index: 3;">
                 <?php foreach ($latestRelease['platforms_data'] as $platform): 
                     $platform_url = !empty($platform['track_url']) ? $platform['track_url'] : $platform['base_url'];
@@ -79,7 +79,7 @@
                         <h3>
                             <a href="/song?id=<?php echo $single['id']; ?>" class="stretched-link"><?php echo htmlspecialchars($single['title']); ?></a>
                         </h3>
-                        <p>Released: <?php echo htmlspecialchars($single['release_date']); ?></p>
+                        <p>Released: <?php echo date("M j, Y", strtotime($single['release_date'])); ?></p>
                     </div>
                     <div class="music-platforms">
                         <?php foreach ($single['platforms_data'] as $platform): 

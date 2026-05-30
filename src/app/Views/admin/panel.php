@@ -57,7 +57,7 @@ renderAdminSidebar($currentAdminPage);
                 <div class="song-details">
                     <div class="song-detail-item">
                         <span class="song-detail-label">Release Date:</span><br>
-                        <?= htmlspecialchars($song['release_date']) ?>
+                        <?= date("M j, Y", strtotime($song['release_date'])) ?>
                     </div>
                     <div class="song-detail-item">
                         <span class="song-detail-label">Genres:</span><br>

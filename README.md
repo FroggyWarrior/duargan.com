@@ -119,7 +119,7 @@ The project is actively evolving. Here are the planned features:
 - [ ] **Albums Support:** Ability to group tracks into EPs and Albums.
 - [ ] **UI Overhaul:** Migration to **Material 3 Expressive** with enhanced transparency effects and smooth motion transitions.
 - [ ] **Improved Workflow:** Add new song types and genres directly from the song creation form without leaving the page.
-- [ ] **Smart Onboarding:** Automatic setup wizard for the admin panel if no database is detected, making the CMS truly plug-and-play.
+- [ ] **Smart Onboarding:** Automatic setup wizard for the admin panel if no database is detected, making the CMS truly plug-and-play, with import and export feature.
 - [ ] **Dynamic Content:** Make 100% of the public site content (bio, contact info) editable via the admin dashboard.
 - [ ] **Customizable SEO** Edit SEO info directly from the Admin Panel.
 - [ ] **Multi-selection editing** Change the genre, release date or song type of multiple songs at once.

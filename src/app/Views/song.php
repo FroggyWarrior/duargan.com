@@ -25,7 +25,7 @@
                     <div class="song-meta">
                         <div class="meta-item">
                             <span class="meta-label">Release Date:</span>
-                            <span class="meta-value"><?= htmlspecialchars($song['release_date']) ?></span>
+                            <span class="meta-value"><?= date("F j, Y", strtotime($song['release_date'])) ?></span>
                         </div>
                         
                         <div class="meta-item">

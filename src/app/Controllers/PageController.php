@@ -76,9 +76,10 @@ class PageController extends BaseController {
         }
 
         // Enhanced SEO: Provide specific description and image for social sharing
+        $formattedDate = date("F j, Y", strtotime($song['release_date']));
         $this->render('song', [
             'pageTitle'   => $song['title'] . " | Duargan",
-            'pageDescription' => "Listen to " . $song['title'] . " by Duargan. Released on " . $song['release_date'],
+            'pageDescription' => "Listen to " . $song['title'] . " by Duargan. Released on " . $formattedDate,
             'pageImage'   => $song['cover_image_url'],
             'currentPage' => 'music',
             'song'        => $song,

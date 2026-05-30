@@ -294,6 +294,8 @@ class DashboardController extends BaseAdminController
         }
         if (empty($releaseDate)) {
             $errors[] = 'Release date is required.';
+        } elseif (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $releaseDate)) {
+            $errors[] = 'Invalid date format. Please use YYYY-MM-DD.';
         }
         if (empty($typeId)) {
             $errors[] = 'Please select a song type.';

@@ -70,7 +70,7 @@
             <div class="music-card fade-in-on-scroll" 
                 data-genres="<?php echo !empty($genre_slugs) ? htmlspecialchars(implode(' ', $genre_slugs)) : ''; ?>" 
                 data-type="<?php echo htmlspecialchars($track['type_slug']); ?>"
-                data-date="<?php $ts = strtotime($track['release_date']); echo $ts ? date('Y-m-d', $ts) : ''; ?>">
+                data-date="<?php echo htmlspecialchars($track['release_date']); ?>">
                 <div class="music-card-bg" style="background-image: url('<?php echo $track['cover_image_url']; ?>')"></div>
                 <img src="<?php echo $track['cover_image_url']; ?>" alt="Cover art for <?php echo htmlspecialchars($track['title']); ?>" class="music-cover" loading="lazy">
                 <div class="music-card-content">

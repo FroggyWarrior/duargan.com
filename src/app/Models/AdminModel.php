@@ -15,6 +15,12 @@ class AdminModel
     private $db;
 
     /**
+     * @var string Encryption key for 2FA secrets. 
+     * In a production environment, this value should be stored in a .env file.
+     */
+    private $encryptionKey = 'base64:uP8vS7uO8zE9nL1qR4tW2yU5iO8pA3sD6fG9hJ2kL5m=';
+
+    /**
      * Constructor for AdminModel.
      * Uses the administrative database connection.
      */
@@ -34,7 +40,12 @@ class AdminModel
     {
         $stmt = $this->db->prepare("SELECT id, username, password, 2fa_enabled, 2fa_secret FROM admin_credentials WHERE username = ?");
         $stmt->execute([$username]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($admin && !empty($admin['2fa_secret'])) {
+            $admin['2fa_secret'] = $this->decryptSecret($admin['2fa_secret']);
+        }
+        return $admin;
     }
 
     /**
@@ -48,7 +59,12 @@ class AdminModel
     {
         $stmt = $this->db->prepare("SELECT id, username, 2fa_enabled, 2fa_secret FROM admin_credentials WHERE id = ?");
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($admin && !empty($admin['2fa_secret'])) {
+            $admin['2fa_secret'] = $this->decryptSecret($admin['2fa_secret']);
+        }
+        return $admin;
     }
 
     /**
@@ -95,8 +111,9 @@ class AdminModel
      * @return bool True on success, false on failure.
      */
     public function enable2fa($secret) {
+        $encryptedSecret = $this->encryptSecret($secret);
         $stmt = $this->db->prepare("UPDATE admin_credentials SET 2fa_enabled = 1, 2fa_secret = ? WHERE id = 1");
-        return $stmt->execute([$secret]);
+        return $stmt->execute([$encryptedSecret]);
     }
 
     /**
@@ -107,5 +124,45 @@ class AdminModel
     public function disable2fa() {
         $stmt = $this->db->prepare("UPDATE admin_credentials SET 2fa_enabled = 0, 2fa_secret = NULL WHERE id = 1");
         return $stmt->execute();
+    }
+
+    /**
+     * Retrieves the encryption key, decoding it if it has a base64 prefix.
+     * 
+     * @return string The raw binary encryption key.
+     */
+    private function getKey() {
+        $key = $this->encryptionKey;
+        if (strpos($key, 'base64:') === 0) {
+            $key = base64_decode(substr($key, 7));
+        }
+        return $key;
+    }
+
+    /**
+     * Encrypts the 2FA secret for secure storage.
+     * 
+     * @param string $secret The plain text Base32 secret.
+     * @return string The encrypted secret, encoded in base64 with its IV.
+     */
+    private function encryptSecret($secret) {
+        $iv = random_bytes(16);
+        $encrypted = openssl_encrypt($secret, 'AES-256-CBC', $this->getKey(), 0, $iv);
+        return base64_encode($iv . $encrypted);
+    }
+
+    /**
+     * Decrypts the 2FA secret for verification.
+     * 
+     * @param string $encryptedSecret The encrypted secret string from the database.
+     * @return string|false The plain text secret or false on failure.
+     */
+    private function decryptSecret($encryptedSecret) {
+        $decoded = base64_decode($encryptedSecret);
+        if (strlen($decoded) < 16) return false;
+
+        $iv = substr($decoded, 0, 16);
+        $encrypted = substr($decoded, 16);
+        return openssl_decrypt($encrypted, 'AES-256-CBC', $this->getKey(), 0, $iv);
     }
 }

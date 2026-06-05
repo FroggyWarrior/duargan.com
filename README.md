@@ -123,6 +123,8 @@ The project is actively evolving. Here are the planned features:
 - [ ] **Dynamic Content:** Make 100% of the public site content (bio, contact info) editable via the admin dashboard.
 - [ ] **Customizable SEO** Edit SEO info directly from the Admin Panel.
 - [ ] **Multi-selection editing** Change the genre, release date or song type of multiple songs at once.
+- [ ] **Play and download songs** Add a player to song.php so visitors can play songs, and download them if it's a free release.
+- [ ] **Lyrics and music videos** Embedded YouTube player and lyrics section in the songs details page.
 
 💡 **Have a suggestion?** We want to hear from you! Please feel free to open an issue to ask for new features or report bugs.
 

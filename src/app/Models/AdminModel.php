@@ -15,10 +15,9 @@ class AdminModel
     private $db;
 
     /**
-     * @var string Encryption key for 2FA secrets. 
-     * In a production environment, this value should be stored in a .env file.
+     * @var string Encryption key for 2FA secrets.
      */
-    private $encryptionKey = 'base64:uP8vS7uO8zE9nL1qR4tW2yU5iO8pA3sD6fG9hJ2kL5m=';
+    private $encryptionKey;
 
     /**
      * Constructor for AdminModel.
@@ -27,6 +26,7 @@ class AdminModel
     public function __construct()
     {
         $this->db = Database::getInstance('admin')->getConnection();
+        $this->encryptionKey = $_ENV['APP_2FA_KEY'];
     }
 
     /**

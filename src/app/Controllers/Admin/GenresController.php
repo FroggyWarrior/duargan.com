@@ -55,6 +55,13 @@ class GenresController extends BaseAdminController {
         if (empty($slug)) {
             $slug = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $name), '-'));
         }
+        
+        if (empty($slug)) {
+            $_SESSION['error'] = 'Could not generate a valid slug. Please use alphanumeric characters.';
+            $this->redirect('/admin/genres/create');
+            return;
+        }
+
         try {
             if ($this->genreModel->create($name, $slug)) {
                 $_SESSION['success'] = 'Genre added successfully.';

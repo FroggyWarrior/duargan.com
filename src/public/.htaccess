@@ -15,3 +15,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # Otherwise, send the request to our Front Controller (index.php)
 RewriteRule ^(.*)$ index.php [QSA,L]
+
+# 2FA Key
+SetEnv APP_2FA_KEY "base64:rpCTRun9W4qQDU+u85H+JQK4K14vR6F/+2YBsLgaKIw="

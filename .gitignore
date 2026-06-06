@@ -2,4 +2,4 @@
 data/
 mysql/
 db.sql
-.gitignore
+.htaccess

@@ -1,7 +1,7 @@
 # 🎵 Artist Portfolio CMS
 ### The source code for Duargan's Official Website
 
-This repository contains the professional, high-performance source code used for the official website of music producer **Duargan**. 
+This repository contains the professional, lightweight, and high-performance source code used for the official website of music producer **Duargan**. 
 
 While this instance serves as Duargan's portfolio, the project is built as a reusable and SEO-optimized CMS engine designed specifically for electronic artists and producers to manage their discography, announcements, and social presence.
 
@@ -13,14 +13,14 @@ While this instance serves as Duargan's portfolio, the project is built as a reu
 ## ✨ Features
 
 ### 🌐 Public Site
-*   **Responsive MD3 Design:** A modern, mobile-first interface following Material Design 3 principles with native Dark/Light mode support.
+*   **Responsive MD3 Design:** A modern and responsive interface following Material Design 3 principles with native Dark/Light mode support.
 *   **Dynamic Discography:** Client-side filtering by genre and release type, with date-based sorting.
 *   **SEO & Social Sharing:** Dynamic Open Graph (OG) tags for every song. When you share a track, social media platforms show the specific cover art and title.
-*   **High Performance:** Native lazy-loading for images and Intersection Observer animations for smooth scroll reveals.
-*   **Site-wide Announcements:** A customizable banner for important news (new releases, tours, etc.).
+*   **High Performance & Lightweight:** Native lazy-loading for images and Intersection Observer animations for smooth scroll reveals. Lightweight code (src folder without images is less than 1MB).
+*   **Custom Announcements:** A customizable banner for important news (new releases, tours, etc.).
 
 ### 🔒 Admin Panel
-*   **Full CRUD Management:** Easily add, edit, or delete songs, genres, platforms, and social links.
+*   **Full CRUD Management:** Easily add, edit, or delete songs, genres, platforms, and social media.
 *   **Smart Image Processing:** Automatically resizes high-res uploads to 900px and converts them to **WebP** for lightning-fast loading without quality loss.
 *   **Secure Authentication:** Protected by Two-Factor Authentication (2FA/TOTP) and CSRF protection.
 *   **SVG Integration:** Manage platform icons using raw SVG code with built-in XSS sanitization.
@@ -49,7 +49,7 @@ This project is fully containerized for a "zero-config" development experience.
 1.  **Clone the repository:**
     ```bash
     git clone https://github.com/FroggyWarrior/duargan.com.git
-    cd your-repo-name
+    cd duargan.com
     ```
 
 2.  **Configure environment variables:**
@@ -60,7 +60,7 @@ This project is fully containerized for a "zero-config" development experience.
     docker compose up -d
     ```
 
-4.  **Access the site:**
+4.  **Access the site locally:**
     *   Public Site: `http://localhost`
     *   Admin Panel: `http://localhost/admin`
     *   Database (phpMyAdmin): `http://localhost:8080`
@@ -89,8 +89,8 @@ The project is powered by a custom-built PHP MVC (Model-View-Controller) archite
 *   `app/Controllers/`: Application logic (Public pages vs. Admin dashboard).
 *   `app/Models/`: Database interactions and data logic.
 *   `app/Views/`: HTML templates and page-specific scripts.
-*   `app/Utils/`: Security utilities (2FA, SVG Sanitizer, Image Processing).
-*   `public/`: The only directory accessible to the web (Entry point, CSS, JS, Images).
+*   `app/Utils/`: Security utilities (2FA, SVG Sanitizer).
+*   `public/`: The only directory accessible to the web (Router index, CSS, JS, Images).
 
 ---
 
@@ -113,6 +113,14 @@ If you plan to upload very large high-res covers, ensure your hosting provider o
 
 ---
 
+## 🔒 Security
+*   **CSRF Protection:** All administrative POST requests require a valid token.
+*   **2FA:** It is highly recommended to enable 2FA in the "Credentials" section of the admin panel immediately after setup.
+*   **Dual-User DB:** The app uses separate database users for reading (public) and writing (admin) to minimize the impact of potential SQL injections.
+*   **XSS Prevention:** All user-generated SVG content is sanitized before being rendered.
+
+---
+
 ## 📅 Roadmap / To-Do List
 
 The project is actively evolving. Here are the planned features:
@@ -125,16 +133,10 @@ The project is actively evolving. Here are the planned features:
 - [ ] **Multi-selection editing** Change the genre, release date or song type of multiple songs at once.
 - [ ] **Play and download songs** Add a player to song.php so visitors can play songs, and download them if it's a free release.
 - [ ] **Lyrics and music videos** Embedded YouTube player and lyrics section in the songs details page.
+- [ ] **Concerts and merch** Integrate with third-party platforms (or maybe build an open source alternative?) for selling tickets and merch.
+- [ ] **Stats and metrics** Show anonimized stats directly in the admin panel for easy understanding of the fanbase.
 
 💡 **Have a suggestion?** We want to hear from you! Please feel free to open an issue to ask for new features or report bugs.
-
----
-
-## 🔒 Security
-*   **CSRF Protection:** All administrative POST requests require a valid token.
-*   **2FA:** It is highly recommended to enable 2FA in the "Credentials" section of the admin panel immediately after setup.
-*   **Dual-User DB:** The app uses separate database users for reading (public) and writing (admin) to minimize the impact of potential SQL injections.
-*   **XSS Prevention:** All user-generated SVG content is sanitized before being rendered.
 
 ---
 

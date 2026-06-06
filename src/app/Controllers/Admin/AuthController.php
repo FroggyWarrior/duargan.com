@@ -76,6 +76,8 @@ class AuthController extends Controller
                 $this->redirect('/admin/panel');
             }
         } else {
+            // Slow down automated brute-force attempts
+            sleep(2);
             $_SESSION['login_error'] = 'Invalid credentials';
             $this->redirect('/admin/login');
         }
@@ -124,6 +126,8 @@ class AuthController extends Controller
             $_SESSION['admin_logged_in'] = true;
             $this->redirect('/admin/panel');
         } else {
+            // Slow down 2FA brute-forcing attempts
+            sleep(1);
             $_SESSION['2fa_error'] = 'Invalid verification code.';
             $this->redirect('/admin/2fa-verify');
         }

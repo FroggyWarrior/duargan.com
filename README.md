@@ -124,17 +124,23 @@ If you plan to upload very large high-res covers, ensure your hosting provider o
 ## 📅 Roadmap / To-Do List
 
 The project is actively evolving. Here are the planned features:
+🔵 High priority
 - [ ] **Albums Support:** Ability to group tracks into EPs and Albums.
-- [ ] **UI Overhaul:** Migration to **Material 3 Expressive** with enhanced transparency effects and smooth motion transitions.
 - [ ] **Improved Workflow:** Add new song types and genres directly from the song creation form without leaving the page.
+- [ ] **Play and download songs** Add a player to song.php so visitors can play songs, and download them if it's a free release.
+🟢 Medium priority
 - [ ] **Smart Onboarding:** Automatic setup wizard for the admin panel if no database is detected, making the CMS truly plug-and-play, with import and export feature.
 - [ ] **Dynamic Content:** Make 100% of the public site content (bio, contact info) editable via the admin dashboard.
 - [ ] **Customizable SEO** Edit SEO info directly from the Admin Panel.
+🟡 Low priority
+- [ ] **UI Overhaul:** Migration to **Material 3 Expressive** with enhanced transparency effects and smooth motion transitions.
 - [ ] **Multi-selection editing** Change the genre, release date or song type of multiple songs at once.
-- [ ] **Play and download songs** Add a player to song.php so visitors can play songs, and download them if it's a free release.
 - [ ] **Lyrics and music videos** Embedded YouTube player and lyrics section in the songs details page.
+🔴 Optional (TBD, might discard in the future)
 - [ ] **Concerts and merch** Integrate with third-party platforms (or maybe build an open source alternative?) for selling tickets and merch.
 - [ ] **Stats and metrics** Show anonimized stats directly in the admin panel for easy understanding of the fanbase.
+- [ ] **Likes and comments** Allow listeners to rate songs and leave feedback, improving the social interaction with the artist.
+- [ ] **Contact form** Basic contact form in the contact page.
 
 💡 **Have a suggestion?** We want to hear from you! Please feel free to open an issue to ask for new features or report bugs.
 

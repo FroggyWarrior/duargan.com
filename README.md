@@ -75,8 +75,9 @@ If you prefer to deploy on a traditional shared hosting service (CPanel) or a st
     *   Apache with `mod_rewrite` enabled.
 2.  **Upload:** Move the contents of the `src/` directory to your server's root.
 3.  **Document Root:** Configure your web server to point its Document Root to the `/public` directory. **Never point it to the project root**, as this would expose your source code and `.env` files.
-4.  **Database:** Create a database and import the `mysql/init.sql` file.
-5.  **Environment:** Create a `.env` file in the root (copy from `.env.example`) and fill in your production database credentials.
+    *   If you're using a shared hosting service, you probably won't be able to change what the Document Root points to. In that case, move the contents of `public` into public_html (or whatever it's called in your website), and the rest (the `app` folder and your `.env` file) into another folder outside of `public_html`. After that, change the `$base_dir` variable on `index.php` to point to that folder.
+4.  **Database:** Create a database and import yours. Change the values in `Database.php` with your own.
+5.  **Environment:** Create a `.env` file in the root (copy from `.env.example`) and fill in your own credentials.
 6.  **Permissions:** Ensure the `public/img/covers/` directory is writable by the web server user (`www-data`).
 
 ---

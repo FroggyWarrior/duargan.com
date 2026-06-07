@@ -63,7 +63,7 @@ This project is fully containerized for a "zero-config" development experience.
 4.  **Access the site locally:**
     *   Public Site: `http://localhost`
     *   Admin Panel: `http://localhost/admin`
-    *   Database (phpMyAdmin): `http://localhost:8080`
+    *   Database (phpMyAdmin): `http://localhost:8080` - Here you can import `example.sql` and play with it.
 
 ### 🌐 Deployment (Non-Docker)
 

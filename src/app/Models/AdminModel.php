@@ -38,14 +38,30 @@ class AdminModel
      */
     public function getAdminByUsername($username)
     {
-        $stmt = $this->db->prepare("SELECT id, username, password, 2fa_enabled, 2fa_secret FROM admin_credentials WHERE username = ?");
-        $stmt->execute([$username]);
+        // We fetch the primary admin (id=1) as the system is configured for a single admin
+        $stmt = $this->db->prepare("SELECT id, username, password, 2fa_enabled, 2fa_secret FROM admin_credentials WHERE id = 1");
+        $stmt->execute();
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($admin && !empty($admin['2fa_secret'])) {
-            $admin['2fa_secret'] = $this->decryptSecret($admin['2fa_secret']);
+        if ($admin && !empty($admin['username'])) {
+            $decryptedUsername = $this->decryptSecret($admin['username']);
+
+            // Migration Fallback: If decryption fails, check if the DB currently holds plaintext
+            if ($decryptedUsername === false && $admin['username'] === $username) {
+                // Auto-migrate the plaintext username to encrypted format
+                $this->updateCredentials($username);
+                $decryptedUsername = $username;
+            }
+
+            if ($decryptedUsername === $username) {
+                $admin['username'] = $decryptedUsername;
+                if (!empty($admin['2fa_secret'])) {
+                    $admin['2fa_secret'] = $this->decryptSecret($admin['2fa_secret']);
+                }
+                return $admin;
+            }
         }
-        return $admin;
+        return false;
     }
 
     /**
@@ -61,8 +77,15 @@ class AdminModel
         $stmt->execute([$id]);
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($admin && !empty($admin['2fa_secret'])) {
-            $admin['2fa_secret'] = $this->decryptSecret($admin['2fa_secret']);
+        if ($admin) {
+            if (!empty($admin['username'])) {
+                $decrypted = $this->decryptSecret($admin['username']);
+                $admin['username'] = ($decrypted !== false) ? $decrypted : $admin['username'];
+            }
+            if (!empty($admin['2fa_secret'])) {
+                $decryptedSecret = $this->decryptSecret($admin['2fa_secret']);
+                $admin['2fa_secret'] = ($decryptedSecret !== false) ? $decryptedSecret : $admin['2fa_secret'];
+            }
         }
         return $admin;
     }
@@ -74,7 +97,12 @@ class AdminModel
      */
     public function getAdmin() {
         $stmt = $this->db->query("SELECT id, username, 2fa_enabled FROM admin_credentials WHERE id = 1");
-        return $stmt->fetch();
+        $admin = $stmt->fetch();
+        if ($admin && !empty($admin['username'])) {
+            $decrypted = $this->decryptSecret($admin['username']);
+            $admin['username'] = ($decrypted !== false) ? $decrypted : $admin['username'];
+        }
+        return $admin;
     }
 
     /**
@@ -89,7 +117,7 @@ class AdminModel
         $params = [];
         if (!empty($newUsername)) {
             $fields[] = "username = ?";
-            $params[] = $newUsername;
+            $params[] = $this->encryptSecret($newUsername);
         }
         if (!empty($newPasswordHash)) {
             $fields[] = "password = ?";

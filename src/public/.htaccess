@@ -17,4 +17,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
 
 # 2FA Key
-SetEnv APP_2FA_KEY "base64:rpCTRun9W4qQDU+u85H+JQK4K14vR6F/+2YBsLgaKIw="
+SetEnv APP_2FA_KEY "base64:br/F2K284KPZMlBOTxKfGUXBC2GFWspHvknEfYVh9Pw="

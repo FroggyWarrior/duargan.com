@@ -2,4 +2,5 @@
 data/
 mysql/
 db.sql
+.gitignore
 src/public/.htaccess

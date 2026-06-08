@@ -138,11 +138,14 @@ The project is actively evolving. Here are the planned features:
 - [ ] **Multi-selection editing** Change the genre, release date or song type of multiple songs at once.
 - [ ] **Lyrics and music videos** Embedded YouTube player and lyrics section in the songs details page.
 - [ ] **Q&A Section** Add a Frequent Q&A section in the about page.
+- [ ] **Donations** Add a donation button to redirect to platflorms like ko-fi or Patreon.
 ## 🔴 Optional (TBD, might discard in the future)
 - [ ] **Concerts and merch** Integrate with third-party platforms (or maybe build an open source alternative?) for selling tickets and merch.
 - [ ] **Stats and metrics** Show anonimized stats directly in the admin panel for easy understanding of the fanbase.
 - [ ] **Likes and comments** Allow listeners to rate songs and leave feedback, improving the social interaction with the artist.
 - [ ] **Contact form** Basic contact form in the contact page.
+- [ ] **Random song** Show a random song with a button, for listeners to discover new music.
+- [ ] **Blog** Update fans with what you're working on, what's coming next, or how something went.
 
 💡 **Have a suggestion?** We want to hear from you! Please feel free to open an issue to ask for new features or report bugs.
 

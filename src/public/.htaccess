@@ -1,100 +1,28 @@
 # ==========================================
-# SECURITY HEADERS (HTTP Observatory A+)
+# .htaccess for testing/development
 # ==========================================
 
-# Enable Rewrite Engine
+# 1.Enable Rewrite module
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
     
-    # Force HTTPS (if SSL is available)
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-    
-    # If the user is looking for a real file (like a CSS or JPG), serve the file directly
+    # 2. Serve JS, CSS and images directly
     RewriteCond %{REQUEST_FILENAME} !-f
-    # If the user is looking for a real directory, serve the directory
+    
+    # 3. Serve real directories directly
     RewriteCond %{REQUEST_FILENAME} !-d
     
-    # Otherwise, send the request to our Front Controller (index.php)
+    # 4.Else, send petitions to Front Controller (index.php)
+    # [QSA] = Query String Append
+    # [L] = Last
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
-# ==========================================
-# SECURITY HEADERS
-# ==========================================
-
-# 1. HSTS (Strict Transport Security) - Forces HTTPS
-# Preload list submission: https://hstspreload.org/
-<IfModule mod_headers.c>
-    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
-    
-    # 2. Content Security Policy (CSP) - Prevents XSS and data injection
-    # Adjust 'self' and domains according to your needs
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
-    
-    # 3. X-Content-Type-Options - Prevents MIME type sniffing
-    Header always set X-Content-Type-Options "nosniff"
-    
-    # 4. X-Frame-Options - Prevents clickjacking
-    Header always set X-Frame-Options "DENY"
-    
-    # 5. Referrer-Policy - Controls referrer information
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    
-    # 6. Permissions-Policy (formerly Feature-Policy) - Controls browser features
-    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
-    
-    # 7. Cross-Origin-Embedder-Policy - Isolates browsing context
-    Header always set Cross-Origin-Embedder-Policy "require-corp"
-    
-    # 8. Cross-Origin-Opener-Policy - Isolates browsing context
-    Header always set Cross-Origin-Opener-Policy "same-origin"
-    
-    # 9. Cross-Origin-Resource-Policy - Protects resources
-    Header always set Cross-Origin-Resource-Policy "same-origin"
-    
-    # 10. X-XSS-Protection (Legacy, deprecated but still checked)
-    Header always set X-XSS-Protection "1; mode=block"
-    
-    # 11. Cache-Control for sensitive pages
-    <FilesMatch "\.(php)$">
-        Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
-        Header always set Pragma "no-cache"
-        Header always set Expires "0"
-    </FilesMatch>
-</IfModule>
-
-# ==========================================
-# ADDITIONAL SECURITY MEASURES
-# ==========================================
-
-# Disable directory browsing
+# 5. Disable directory indexing
 Options -Indexes
 
-# Prevent access to hidden files (like .env, .git, .htaccess)
-<FilesMatch "^\.">
-    Require all denied
-</FilesMatch>
-
-# Protect sensitive files
-<FilesMatch "(^#.*#|\.(bak|conf|dist|fla|in[ci]|log|psd|sh|sql|sw[op])|~)$">
-    Require all denied
-</FilesMatch>
-
-# Block access to composer files
-<Files "composer.json">
-    Require all denied
-</Files>
-<Files "composer.lock">
-    Require all denied
-</Files>
-
-# ==========================================
-# PHP SETTINGS (if mod_php is available)
-# ==========================================
-<IfModule mod_php.c>
-    php_flag display_errors Off
-    php_flag log_errors On
-    php_value error_log /home/username/logs/php_errors.log
-</IfModule>
+# 6. (Optional) Allow access to hidden files
+# <FilesMatch "^\.">
+#     Require all granted
+# </FilesMatch>

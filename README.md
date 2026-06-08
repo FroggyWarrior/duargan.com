@@ -137,6 +137,7 @@ The project is actively evolving. Here are the planned features:
 - [ ] **UI Overhaul:** Migration to **Material 3 Expressive** with enhanced transparency effects and smooth motion transitions.
 - [ ] **Multi-selection editing** Change the genre, release date or song type of multiple songs at once.
 - [ ] **Lyrics and music videos** Embedded YouTube player and lyrics section in the songs details page.
+- [ ] **Q&A Section** Add a Frequent Q&A section in the about page.
 ## 🔴 Optional (TBD, might discard in the future)
 - [ ] **Concerts and merch** Integrate with third-party platforms (or maybe build an open source alternative?) for selling tickets and merch.
 - [ ] **Stats and metrics** Show anonimized stats directly in the admin panel for easy understanding of the fanbase.

@@ -128,7 +128,7 @@ The project is actively evolving. Here are the planned features:
 ## 🔵 High priority
 - [ ] **Albums Support:** Ability to group tracks into EPs and Albums.
 - [ ] **Improved Workflow:** Add new song types and genres directly from the song creation form without leaving the page.
-- [ ] **Play and download songs** Add a player to song.php so visitors can play songs, and download them if it's a free release.
+- [ ] **Play and download songs** Add a player to song.php so visitors can play songs, and download them if it's copyright free.
 - [ ] **License of the track:** Shows license info, i.e. Copyright free, Copyright legal text, Creative Commons, etc.
 - [ ] **Release info:** For official releases, show the UPC code and other relevant info.
 ## 🟢 Medium priority

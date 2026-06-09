@@ -129,6 +129,8 @@ The project is actively evolving. Here are the planned features:
 - [ ] **Albums Support:** Ability to group tracks into EPs and Albums.
 - [ ] **Improved Workflow:** Add new song types and genres directly from the song creation form without leaving the page.
 - [ ] **Play and download songs** Add a player to song.php so visitors can play songs, and download them if it's a free release.
+- [ ] **License of the track:** Shows license info, i.e. Copyright free, Copyright legal text, Creative Commons, etc.
+- [ ] **Release info:** For official releases, show the UPC code and other relevant info.
 ## 🟢 Medium priority
 - [ ] **Smart Onboarding:** Automatic setup wizard for the admin panel if no database is detected, making the CMS truly plug-and-play, with import and export feature.
 - [ ] **Dynamic Content:** Make 100% of the public site content (bio, contact info) editable via the admin dashboard.

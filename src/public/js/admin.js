@@ -173,6 +173,19 @@
                 }
             }
         });
+
+        // 4. 2FA QR Code initialization
+        const qrContainer = document.getElementById('qrcode');
+        if (qrContainer && typeof QRCode !== 'undefined') {
+            const otpauthUrl = qrContainer.getAttribute('data-otpauth');
+            if (otpauthUrl) {
+                new QRCode(qrContainer, {
+                    text: otpauthUrl,
+                    width: 200,
+                    height: 200
+                });
+            }
+        }
     });
 
     /**

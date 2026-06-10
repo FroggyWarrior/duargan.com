@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/admin.js" defer></script>
     <script src="/js/qrcode.min.js"></script>
 </head>
 <body>
@@ -60,7 +61,7 @@ renderAdminSidebar($currentAdminPage);
                     <div class="setup-2fa-container" style="text-align: center; padding: 1rem; border: 1px dashed var(--outline); border-radius: 12px;">
                         <h4>Set up Authenticator App</h4>
                         <p class="form-help">Scan this QR code with your 2FA app</p>
-                        <div id="qrcode" style="display: flex; justify-content: center; margin: 1.5rem 0; padding: 10px; background: white; width: fit-content; margin-left: auto; margin-right: auto; border-radius: 8px;"></div>
+                        <div id="qrcode" data-otpauth="<?= $otpauthUrl ?>" style="display: flex; justify-content: center; margin: 1.5rem 0; padding: 10px; background: white; width: fit-content; margin-left: auto; margin-right: auto; border-radius: 8px;"></div>
                         <p style="font-family: monospace; background: var(--surface); padding: 0.5rem; border-radius: 4px;"><?= $new2faSecret ?></p>
 
                         <form method="POST" action="/admin/credentials/enable2fa" style="max-width: 300px; margin: 1.5rem auto;">
@@ -76,13 +77,6 @@ renderAdminSidebar($currentAdminPage);
                                 <a href="/admin/credentials" class="btn btn-cancel">Cancel</a>
                             </div>
                         </form>
-                        <script>
-                            new QRCode(document.getElementById("qrcode"), {
-                                text: "<?= $otpauthUrl ?>",
-                                width: 200,
-                                height: 200
-                            });
-                        </script>
                     </div>
                 <?php else: ?>
                     <div class="info-box" style="background-color: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.3); border-radius: 8px; padding: 1rem; margin: 1rem 0;">

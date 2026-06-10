@@ -48,7 +48,7 @@ renderAdminSidebar($currentAdminPage);
             ?>
             <div class="song-box">
                 <div class="song-box-header">
-                    <img src="<?= htmlspecialchars($cover) ?>" alt="<?= htmlspecialchars($song['title']) ?>" class="song-cover" onerror="this.style.display='none'">
+                    <img src="<?= htmlspecialchars($cover) ?>" alt="<?= htmlspecialchars($song['title']) ?>" class="song-cover">
                     <div class="song-info">
                         <h3 class="song-title"><?= htmlspecialchars($song['title']) ?></h3>
                         <div class="song-type"><?= htmlspecialchars($song['type_name'] ?? '') ?></div>

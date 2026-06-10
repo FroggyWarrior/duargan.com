@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/admin.js" defer></script>
     <style>
         .platform-url-group { display: none; margin-top: 0.5rem; width: 100%; }
         .platform-url-input { width: 100%; padding: 0.75rem; border: 2px solid var(--outline); border-radius: 8px; background-color: var(--surface); color: var(--on-surface); font-size: 0.9rem; box-sizing: border-box; }
@@ -60,7 +61,7 @@ renderAdminSidebar($currentAdminPage);
 
                 <!-- Cover Image Upload -->
                 <div class="file-upload-group">
-                    <button type="button" class="file-upload-btn" onclick="document.getElementById('cover_image').click()" aria-label="Upload cover image"><span class="material-icons" aria-hidden="true">upload</span> Upload Cover Image</button>
+                    <button type="button" class="file-upload-btn" aria-label="Upload cover image"><span class="material-icons" aria-hidden="true">upload</span> Upload Cover Image</button>
                     <input type="file" id="cover_image" name="cover_image" class="file-upload-input" accept="image/*">
                     <div id="file_name" class="file-name" aria-live="polite">No file selected</div>
                     <p class="form-help">Upload a cover image file (JPG, PNG, etc.)</p>
@@ -127,7 +128,7 @@ renderAdminSidebar($currentAdminPage);
                             }
                         ?>
                         <div class="platform-form-item">
-                            <div class="platform-form-header" onclick="document.getElementById('platform_<?= $platform['id'] ?>').click()">
+                            <div class="platform-form-header">
                                 <div class="platform-form-icon" aria-hidden="true"><?= $platform['icon_svg'] ?></div>
                                 <div style="flex:1; min-width:0;">
                                     <div class="platform-form-name"><?= htmlspecialchars($platform['name']) ?></div>

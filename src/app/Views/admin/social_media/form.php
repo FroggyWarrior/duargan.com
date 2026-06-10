@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/admin.js" defer></script>
 </head>
 <body>
 <?php
@@ -38,7 +39,7 @@ renderAdminSidebar($currentAdminPage);
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                 <div class="material-form-group with-help">
-                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($platform['name']) : '' ?>" placeholder=" " required oninput="AdminUtils.generateSlug(this.value, 'slug')">
+                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($platform['name']) : '' ?>" placeholder=" " required>
                     <label class="material-form-label" for="name">Platform Name *</label>
                 </div>
                 <p class="form-help">e.g., YouTube, Instagram, Discord</p>
@@ -63,7 +64,7 @@ renderAdminSidebar($currentAdminPage);
 
                 <div class="form-section">
                     <h3>SVG Icon *</h3>
-                    <textarea name="icon_svg" id="icon_svg" class="form-textarea" rows="8" placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">...' required oninput="AdminUtils.updateSvgPreview('icon_svg', 'svgPreview')"><?= $isEdit ? htmlspecialchars($platform['icon_svg']) : '' ?></textarea>
+                    <textarea name="icon_svg" id="icon_svg" class="form-textarea" rows="8" placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">...' required><?= $isEdit ? htmlspecialchars($platform['icon_svg']) : '' ?></textarea>
                     <div class="svg-preview" id="svgPreview">
                         <?= $isEdit ? $platform['icon_svg'] : '<span class="material-icons">image</span>' ?>
                     </div>

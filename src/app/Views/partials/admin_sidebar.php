@@ -17,9 +17,6 @@ function renderAdminSidebar($currentPage = null) {
         'credentials'  => ['url' => '/admin/credentials',    'icon' => 'admin_panel_settings','label' => 'Credentials'],
     ];
     ?>
-    
-    <!-- Ensure admin.js is loaded for sidebar functionality -->
-    <script src="/js/admin.js"></script>
 
     <div class="nav-overlay" id="navOverlay"></div>
 

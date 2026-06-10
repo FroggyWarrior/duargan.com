@@ -34,7 +34,7 @@ renderAdminSidebar($currentAdminPage);
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                 <div class="material-form-group with-help">
-                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($type['name']) : '' ?>" placeholder=" " required oninput="AdminUtils.generateSlug(this.value, 'slug')">
+                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($type['name']) : '' ?>" placeholder=" " required>
                     <label class="material-form-label" for="name">Type Name *</label>
                 </div>
                 <p class="form-help">Enter the song type (e.g., "Official Release", "Remix")</p>

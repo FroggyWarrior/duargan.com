@@ -46,7 +46,7 @@ renderAdminSidebar($currentAdminPage);
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                 <div class="material-form-group with-help">
-                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($platform['name']) : '' ?>" placeholder=" " required oninput="AdminUtils.generateSlug(this.value, 'slug')">
+                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($platform['name']) : '' ?>" placeholder=" " required>
                     <label class="material-form-label" for="name">Platform Name *</label>
                 </div>
                 <p class="form-help">e.g., Spotify, Apple Music</p>
@@ -78,7 +78,7 @@ renderAdminSidebar($currentAdminPage);
                         </div>
                         <div class="color-picker-controls">
                             <div class="color-picker-input-wrapper">
-                                <input type="color" id="color" name="color" value="<?= $isEdit ? htmlspecialchars($platform['color']) : '#666666' ?>" class="md3-color-input" onchange="updateColorPreview(this.value)">
+                                <input type="color" id="color" name="color" value="<?= $isEdit ? htmlspecialchars($platform['color']) : '#666666' ?>" class="md3-color-input">
                                 <label for="color" class="md3-color-button"><span class="material-icons">colorize</span> Choose Color</label>
                             </div>
                             <div class="color-picker-preview">
@@ -90,7 +90,7 @@ renderAdminSidebar($currentAdminPage);
 
                 <div class="form-section">
                     <h3>SVG Icon *</h3>
-                    <textarea name="icon_svg" id="icon_svg" class="form-textarea" rows="8" placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">...' required oninput="AdminUtils.updateSvgPreview('icon_svg', 'svgPreview')"><?= $isEdit ? htmlspecialchars($platform['icon_svg']) : '' ?></textarea>
+                    <textarea name="icon_svg" id="icon_svg" class="form-textarea" rows="8" placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">...' required><?= $isEdit ? htmlspecialchars($platform['icon_svg']) : '' ?></textarea>
                     <div class="svg-preview-with-color" style="margin-top: 1rem;">
                         <div class="svg-color-preview" id="svgPreview" style="color: <?= $isEdit ? htmlspecialchars($platform['color']) : '#666666' ?>;">
                             <?= $isEdit ? $platform['icon_svg'] : '<span class="material-icons">image</span>' ?>
@@ -110,19 +110,5 @@ renderAdminSidebar($currentAdminPage);
         </div>
     </main>
 </div>
-<script>
-    /**
-     * Updates the UI color preview based on the hex picker.
-     * @param {string} hex Hex color code.
-     */
-function updateColorPreview(hex) {
-    document.getElementById('colorValue').textContent = hex;
-    document.getElementById('colorPreviewCircle').style.backgroundColor = hex;
-    document.getElementById('svgPreview').style.color = hex;
-}
-document.addEventListener('DOMContentLoaded', function() {
-    AdminUtils.updateSvgPreview('icon_svg', 'svgPreview');
-});
-</script>
 </body>
 </html>

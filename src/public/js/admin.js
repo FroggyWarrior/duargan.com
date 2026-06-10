@@ -137,6 +137,42 @@
             annText.addEventListener('input', AdminUtils.updateAnnouncementPreview);
             AdminUtils.updateAnnouncementPreview();
         }
+
+        // Global listeners for dynamic inputs to replace inline event handlers (CSP compliance)
+        
+        // 1. Slug generation on input
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'name' && document.getElementById('slug')) {
+                AdminUtils.generateSlug(e.target.value, 'slug');
+            }
+            
+            // 2. SVG Preview on input
+            if (e.target.id === 'icon_svg' && document.getElementById('svgPreview')) {
+                AdminUtils.updateSvgPreview('icon_svg', 'svgPreview');
+            }
+        });
+
+        // 3. Color sync for platforms and announcements
+        const colorInputs = {
+            'color': { val: 'colorValue', circle: 'colorPreviewCircle', svg: 'svgPreview' },
+            'colorPicker': { 
+                preview: 'announcementPreview', 
+                display: 'colorHexDisplay', 
+                circle: 'colorPreviewCircle', 
+                hidden: 'background_color' 
+            }
+        };
+
+        document.addEventListener('input', function(e) {
+            if (colorInputs[e.target.id]) {
+                const cfg = colorInputs[e.target.id];
+                if (e.target.id === 'color') {
+                    AdminUtils.syncColor(e.target.value, cfg.svg, cfg.val, cfg.circle);
+                } else {
+                    AdminUtils.syncColor(e.target.value, cfg.preview, cfg.display, cfg.circle, cfg.hidden);
+                }
+            }
+        });
     });
 
     /**
@@ -161,12 +197,22 @@
             document.getElementById('modalConfirm').onclick = () => { modal.remove(); resolve(true); };
         });
     }
+
+    /**
+     * Global Error listener for images (CSP replacement for onerror)
+     * Error events do not bubble, so we use capture phase.
+     */
+    document.addEventListener('error', function (e) {
+        if (e.target.tagName.toLowerCase() === 'img' && (e.target.classList.contains('song-cover') || e.target.id === 'cover_preview')) {
+            e.target.style.display = 'none';
+        }
+    }, true);
 })();
 
 /**
  * Shared Form Utilities
  */
-const AdminUtils = {
+var AdminUtils = {
     /**
      * Generates a URL-friendly slug from a name string.
      * @param {string} name - The source text.
@@ -271,3 +317,55 @@ const AdminUtils = {
         if (pText) pText.textContent = text.trim() || 'Your announcement text will appear here.';
     }
 };
+
+/** --- Event Delegation for Admin Panel --- */
+document.addEventListener('click', function(e) {
+    // 1. Close alert/notification buttons
+    const closeBtn = e.target.closest('.alert-close, .notification-close, [data-dismiss="alert"]');
+    if (closeBtn) {
+        const alert = closeBtn.closest('.alert, .notification, .flash-message');
+        if (alert) {
+            alert.style.display = 'none';
+        }
+        return;
+    }
+
+    // 2. Trigger file input for cover image upload
+    const coverTrigger = e.target.closest('.cover-upload-trigger, .file-upload-btn, [data-trigger="cover_image"]');
+    if (coverTrigger) {
+        const fileInput = document.getElementById('cover_image');
+        if (fileInput) {
+            fileInput.click();
+        }
+        return;
+    }
+
+    // 3. Trigger platform checkboxes (for custom styled checkboxes)
+    const platformTrigger = e.target.closest('.platform-trigger, .platform-form-header, [data-platform-trigger]');
+    if (platformTrigger) {
+        const platformId = platformTrigger.getAttribute('data-platform-trigger') || 
+                          platformTrigger.getAttribute('data-target') ||
+                          platformTrigger.querySelector('input[type="checkbox"]')?.id;
+        if (platformId) {
+            const checkbox = document.getElementById(platformId);
+            if (checkbox) {
+                checkbox.click();
+            }
+        }
+    }
+});
+
+/** --- Live Preview for Cover Image --- */
+document.addEventListener('change', function(e) {
+    if (e.target.id === 'cover_image' && e.target.files && e.target.files[0]) {
+        const preview = document.getElementById('cover_preview');
+        if (preview) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    }
+});

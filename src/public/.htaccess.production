@@ -15,7 +15,7 @@
     # Otherwise, send the request to our Front Controller (index.php)
     RewriteRule ^(.*)$ index.php [QSA,L]
     
-    # Mark admin area for specific headers
+    # Mark admin area for specific headers (CSP relaxation)
     RewriteRule ^admin - [E=ADMIN_AREA:1]
 </IfModule>
 
@@ -26,11 +26,18 @@
     # 1. HSTS (Strict Transport Security) - 2 years max-age for preload robustness
     Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     
-    # 2. Content Security Policy (CSP) - STRICT MODE
+    # 2. Content Security Policy (CSP) - STRICT MODE (Frontend Public)
     # Removed 'unsafe-inline' and 'unsafe-eval' to maximize Observatory score.
-    # All JS must be in external .js files.
+    # All JS must be in external .js files (e.g., script.js, song.js).
     # Kept 'unsafe-inline' ONLY for style-src (Material Design 3 dynamic theme injection).
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+    # Added media-src 'self' data: to allow inline SVGs and base64 media from DB.
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' data:; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+    
+    # 2b. Content Security Policy (CSP) - RELAXED MODE (Admin Panel Only)
+    # Overwrites the strict CSP above ONLY for URLs starting with /admin.
+    # Allows 'unsafe-inline' for legacy onclick handlers (close alerts, modals).
+    # Allows data: in media-src for SVG previewers and color pickers.
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' data:; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';" env=ADMIN_AREA
     
     # 3. X-Content-Type-Options - Prevents MIME type sniffing
     Header always set X-Content-Type-Options "nosniff"

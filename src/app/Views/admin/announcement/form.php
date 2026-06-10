@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/admin.js" defer></script>
 </head>
 <body>
 <?php
@@ -69,7 +70,7 @@ renderAdminSidebar($currentAdminPage);
                                 <div class="color-preview-circle" id="colorPreviewCircle" style="background-color: <?= htmlspecialchars($bgColor) ?>;"></div>
                             </div>
                             <div class="color-picker-input-wrapper">
-                                <input type="color" id="colorPicker" class="md3-color-input" value="<?= htmlspecialchars($bgColor) ?>" oninput="AdminUtils.syncColor(this.value, 'announcementPreview', 'colorHexDisplay', 'colorPreviewCircle', 'background_color')">
+                                <input type="color" id="colorPicker" class="md3-color-input" value="<?= htmlspecialchars($bgColor) ?>">
                                 <label class="md3-color-button" for="colorPicker"><span class="material-icons">colorize</span> Choose Color</label>
                             </div>
                         </div>

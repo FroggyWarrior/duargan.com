@@ -148,6 +148,7 @@ The project is actively evolving. Here are the planned features:
 - [ ] **Contact form** Basic contact form in the contact page.
 - [ ] **Random song** Show a random song with a button, for listeners to discover new music.
 - [ ] **Blog** Update fans with what you're working on, what's coming next, or how something went.
+- [ ] **2-DB architecture** Move admin credentials to a different database with a different user.
 
 💡 **Have a suggestion?** We want to hear from you! Please feel free to open an issue to ask for new features or report bugs.
 

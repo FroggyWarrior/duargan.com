@@ -116,4 +116,14 @@ document.addEventListener('DOMContentLoaded', function() {
     scrollElements.forEach(el => {
         observer.observe(el);
     });
+
+    /** --- 5. Stop Propagation for Platform Buttons in Cards --- */
+    // Prevent clicks on platform buttons from triggering the parent card's link
+    document.addEventListener('click', function(e) {
+        const platformBtn = e.target.closest('.platform-btn');
+        if (platformBtn) {
+            // Stop the click from bubbling up to the .music-card or .stretched-link
+            e.stopPropagation();
+        }
+    });
 });

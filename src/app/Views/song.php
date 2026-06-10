@@ -114,7 +114,6 @@
                             class="platform-btn icon-only" 
                             target="_blank" 
                             rel="noopener" 
-                            onclick="event.stopPropagation();"
                             style="color: <?= $platform['color'] ?>; background-color: color-mix(in srgb, <?= $platform['color'] ?> 10%, white);">
                             <?= html_entity_decode(stripslashes($platform['icon_svg'])) ?>
                         </a>

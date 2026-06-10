@@ -12,23 +12,31 @@
      */
     function applyAdminTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        const icon = document.getElementById('themeIcon');
-        const label = document.getElementById('themeLabel');
-        if (!icon) return;
         
-        if (theme === 'dark') {
-            icon.textContent = 'light_mode';
-            label.textContent = 'Light Mode';
-        } else {
-            icon.textContent = 'dark_mode';
-            label.textContent = 'Dark Mode';
-        }
+        // Robustly find and update all theme toggles and icons on the page
+        const toggles = document.querySelectorAll('#themeToggle, .theme-toggle');
+        
+        toggles.forEach(toggle => {
+            // Try to find icon and label within the toggle context or by ID
+            const icon = toggle.querySelector('.material-icons') || document.getElementById('themeIcon');
+            const label = toggle.querySelector('#themeLabel') || document.getElementById('themeLabel');
+            
+            if (icon) {
+                icon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+            }
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+            }
+        });
     }
 
     // Immediate theme execution to prevent flickering
     applyAdminTheme(localStorage.getItem('theme') || 'dark');
 
     document.addEventListener('DOMContentLoaded', function () {
+        // Re-apply theme state to sync UI elements (icons/labels) now that the DOM is ready
+        applyAdminTheme(localStorage.getItem('theme') || 'dark');
+
         const sidebar = document.getElementById('adminSidebar');
         const overlay = document.getElementById('navOverlay');
         const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -88,6 +96,47 @@
                 }
             }
         });
+
+        /** --- Form-specific initializations --- */
+        
+        // Song form platform toggles
+        document.querySelectorAll('.platform-form-checkbox').forEach(cb => {
+            cb.addEventListener('change', () => AdminUtils.togglePlatformUrl(cb.value));
+            if (cb.checked) AdminUtils.togglePlatformUrl(cb.value);
+        });
+
+        // Image preview from URL
+        const coverUrlInput = document.getElementById('cover_image_url');
+        if (coverUrlInput) {
+            coverUrlInput.addEventListener('change', (e) => AdminUtils.updatePreviewFromUrl(e.target.value));
+            if (coverUrlInput.value) AdminUtils.updatePreviewFromUrl(coverUrlInput.value);
+        }
+
+        // File upload preview
+        const coverFileInput = document.getElementById('cover_image');
+        if (coverFileInput) {
+            coverFileInput.addEventListener('change', (e) => AdminUtils.updateFileName(e.target));
+        }
+
+        // Password matching
+        const newPassword = document.getElementById('new_password');
+        const confirmPassword = document.getElementById('confirm_password');
+        if (newPassword && confirmPassword) {
+            const validate = () => {
+                confirmPassword.setCustomValidity(newPassword.value !== confirmPassword.value ? "Passwords do not match" : "");
+            };
+            newPassword.addEventListener('input', validate);
+            confirmPassword.addEventListener('input', validate);
+        }
+
+        // Announcement Live Preview
+        const annTitle = document.getElementById('title');
+        const annText = document.getElementById('text');
+        if (annTitle && annText && document.getElementById('announcementPreview')) {
+            annTitle.addEventListener('input', AdminUtils.updateAnnouncementPreview);
+            annText.addEventListener('input', AdminUtils.updateAnnouncementPreview);
+            AdminUtils.updateAnnouncementPreview();
+        }
     });
 
     /**
@@ -141,8 +190,84 @@ const AdminUtils = {
     updateSvgPreview: function(textareaId, previewId) {
         const svgCode = document.getElementById(textareaId).value;
         const previewDiv = document.getElementById(previewId);
+        const colorInput = document.getElementById('color');
         if (previewDiv) {
             previewDiv.innerHTML = svgCode.trim() ? svgCode : '<span class="material-icons">image</span>';
+            if (colorInput) previewDiv.style.color = colorInput.value;
         }
+    },
+
+    /**
+     * Toggles visibility of platform URL input fields in song form.
+     */
+    togglePlatformUrl: function(platformId) {
+        const cb = document.getElementById('platform_' + platformId);
+        const div = document.getElementById('platform_url_' + platformId);
+        if (cb && div) div.style.display = cb.checked ? 'block' : 'none';
+    },
+
+    /**
+     * Updates file name display and image preview for file uploads.
+     */
+    updateFileName: function(input) {
+        const fileName = document.getElementById('file_name');
+        if (input.files && input.files[0]) {
+            fileName.textContent = 'Selected: ' + input.files[0].name;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const preview = document.getElementById('cover_preview');
+                if (preview) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else if (fileName) {
+            fileName.textContent = 'No file selected';
+        }
+    },
+
+    /**
+     * Updates image preview using a remote URL.
+     */
+    updatePreviewFromUrl: function(url) {
+        const preview = document.getElementById('cover_preview');
+        if (preview) {
+            if (url) {
+                preview.src = url;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+    },
+
+    /**
+     * Updates MD3 color picker UI and syncs with hidden inputs.
+     */
+    syncColor: function(hex, previewId, displayId, circleId, hiddenId) {
+        if (hiddenId) document.getElementById(hiddenId).value = hex;
+        if (displayId) document.getElementById(displayId).textContent = hex;
+        if (circleId) document.getElementById(circleId).style.backgroundColor = hex;
+        if (previewId) {
+            const preview = document.getElementById(previewId);
+            if (preview.classList.contains('announcement-preview-banner')) {
+                preview.style.backgroundColor = hex;
+            } else {
+                preview.style.color = hex;
+            }
+        }
+    },
+
+    /**
+     * Updates the site announcement preview in real-time.
+     */
+    updateAnnouncementPreview: function() {
+        const title = document.getElementById('title').value;
+        const text = document.getElementById('text').value;
+        const pTitle = document.getElementById('previewTitle');
+        const pText = document.getElementById('previewText');
+        if (pTitle) pTitle.textContent = title.trim() || 'Your title here';
+        if (pText) pText.textContent = text.trim() || 'Your announcement text will appear here.';
     }
 };

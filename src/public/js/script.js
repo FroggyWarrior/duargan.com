@@ -126,4 +126,147 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
         }
     });
+
+    /** --- 6. Music Library Filters and Sorting --- */
+    const musicGrid = document.getElementById('musicGrid');
+    if (musicGrid) {
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const filterCount = document.getElementById('filterCount');
+        const noResults = document.getElementById('noResults');
+        const sortBtn = document.getElementById('sortBtn');
+        const sortLabel = document.getElementById('sortLabel');
+        const sortIcon = sortBtn ? sortBtn.querySelector('.material-icons') : null;
+
+        let activeFilters = { genre: 'all', type: 'all' };
+        let sortOrder = 'desc';
+
+        const sortCards = () => {
+            const cards = Array.from(musicGrid.querySelectorAll('.music-card'));
+            cards.sort((a, b) => {
+                const dateA = new Date(a.getAttribute('data-date'));
+                const dateB = new Date(b.getAttribute('data-date'));
+                return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+            });
+            cards.forEach(card => musicGrid.appendChild(card));
+        };
+
+        const applyFilters = () => {
+            const cards = musicGrid.querySelectorAll('.music-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardGenres = card.getAttribute('data-genres');
+                const cardType = card.getAttribute('data-type');
+                let genreMatch = activeFilters.genre === 'all' || (cardGenres && cardGenres.split(' ').includes(activeFilters.genre));
+                const typeMatch = activeFilters.type === 'all' || cardType === activeFilters.type;
+
+                if (genreMatch && typeMatch) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (filterCount) {
+                filterCount.textContent = (activeFilters.genre === 'all' && activeFilters.type === 'all') 
+                    ? `Showing all ${visibleCount} tracks` 
+                    : `Showing ${visibleCount} of ${cards.length} tracks`;
+            }
+
+            if (noResults) {
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+                musicGrid.style.display = visibleCount === 0 ? 'none' : 'grid';
+            }
+        };
+
+        if (sortBtn) {
+            sortBtn.addEventListener('click', () => {
+                sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+                sortLabel.textContent = sortOrder === 'asc' ? 'Oldest first' : 'Newest first';
+                if (sortIcon) sortIcon.textContent = sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward';
+                sortBtn.classList.toggle('active', sortOrder === 'asc');
+                sortCards();
+                applyFilters();
+            });
+        }
+
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                const type = this.getAttribute('data-filter');
+                document.querySelectorAll(`.filter-chip[data-filter="${type}"]`).forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                activeFilters[type] = this.getAttribute('data-value');
+                applyFilters();
+            });
+        });
+
+        // Filter Accordion
+        const filterToggle = document.getElementById('filterToggle');
+        const musicFilters = document.querySelector('.music-filters');
+        if (filterToggle && musicFilters) {
+            filterToggle.addEventListener('click', () => {
+                const isActive = musicFilters.classList.contains('active');
+                const buttonText = filterToggle.querySelector('span:first-child');
+
+                if (isActive) {
+                    musicFilters.style.maxHeight = musicFilters.scrollHeight + 'px';
+                    musicFilters.offsetHeight; 
+                    musicFilters.style.maxHeight = '0';
+                    musicFilters.classList.remove('active');
+                    filterToggle.setAttribute('aria-expanded', 'false');
+                    setTimeout(() => { if (buttonText) buttonText.textContent = 'Show Filters'; }, 200);
+                } else {
+                    musicFilters.classList.add('active');
+                    musicFilters.style.maxHeight = musicFilters.scrollHeight + 'px';
+                    filterToggle.setAttribute('aria-expanded', 'true');
+                    if (buttonText) buttonText.textContent = 'Hide Filters';
+                    setTimeout(() => { musicFilters.style.maxHeight = 'none'; }, 500);
+                }
+            });
+        }
+    }
+
+    /** --- 7. Song Details Functionality --- */
+    const copyLinkButtons = document.querySelectorAll('.share-icon.copy-link');
+    copyLinkButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const url = this.getAttribute('data-url');
+            const tooltip = this.querySelector('.copy-tooltip');
+            
+            const showSuccess = () => {
+                if (tooltip) {
+                    tooltip.textContent = 'Copied!';
+                    tooltip.classList.add('show');
+                    setTimeout(() => {
+                        tooltip.classList.remove('show');
+                        setTimeout(() => { tooltip.textContent = 'Copy link'; }, 300);
+                    }, 2000);
+                }
+            };
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(showSuccess).catch(err => {
+                    console.error('Clipboard API failed, falling back', err);
+                    fallbackCopy(url, showSuccess);
+                });
+            } else {
+                fallbackCopy(url, showSuccess);
+            }
+        });
+    });
+
+    function fallbackCopy(text, callback) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            callback();
+        } catch (err) {
+            console.error('Fallback copy failed', err);
+        }
+        document.body.removeChild(textArea);
+    }
 });

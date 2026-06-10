@@ -46,14 +46,14 @@ renderAdminSidebar($currentAdminPage);
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                 <div class="material-form-group with-help">
-                    <input type="text" name="title" id="title" class="material-form-input" value="<?= htmlspecialchars($title) ?>" placeholder=" " required oninput="updatePreview()">
+                    <input type="text" name="title" id="title" class="material-form-input" value="<?= htmlspecialchars($title) ?>" placeholder=" " required>
                     <label class="material-form-label" for="title">Title *</label>
                 </div>
                 <p class="form-help">Short headline (e.g., "New track out now!")</p>
 
                 <div class="form-section">
                     <h3>Announcement Text *</h3>
-                    <textarea name="text" id="text" class="form-textarea" rows="4" placeholder="Write the announcement body here…" required oninput="updatePreview()"><?= htmlspecialchars($text) ?></textarea>
+                    <textarea name="text" id="text" class="form-textarea" rows="4" placeholder="Write the announcement body here…" required><?= htmlspecialchars($text) ?></textarea>
                     <p class="form-help">Supports line breaks. Keep it concise.</p>
                 </div>
 
@@ -69,7 +69,7 @@ renderAdminSidebar($currentAdminPage);
                                 <div class="color-preview-circle" id="colorPreviewCircle" style="background-color: <?= htmlspecialchars($bgColor) ?>;"></div>
                             </div>
                             <div class="color-picker-input-wrapper">
-                                <input type="color" id="colorPicker" class="md3-color-input" value="<?= htmlspecialchars($bgColor) ?>" oninput="syncColor(this.value)">
+                                <input type="color" id="colorPicker" class="md3-color-input" value="<?= htmlspecialchars($bgColor) ?>" oninput="AdminUtils.syncColor(this.value, 'announcementPreview', 'colorHexDisplay', 'colorPreviewCircle', 'background_color')">
                                 <label class="md3-color-button" for="colorPicker"><span class="material-icons">colorize</span> Choose Color</label>
                             </div>
                         </div>
@@ -102,22 +102,5 @@ renderAdminSidebar($currentAdminPage);
         </div>
     </main>
 </div>
-<script>
-    function syncColor(hex) {
-        document.getElementById('background_color').value = hex;
-        document.getElementById('colorHexDisplay').textContent = hex;
-        document.getElementById('colorPreviewCircle').style.backgroundColor = hex;
-        document.getElementById('announcementPreview').style.backgroundColor = hex;
-    }
-    function updatePreview() {
-        let title = document.getElementById('title').value;
-        let text = document.getElementById('text').value;
-        document.getElementById('previewTitle').textContent = title.trim() || 'Your title here';
-        document.getElementById('previewText').textContent = text.trim() || 'Your announcement text will appear here.';
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('title').addEventListener('input', updatePreview);
-    });
-</script>
 </body>
 </html>

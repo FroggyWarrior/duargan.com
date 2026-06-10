@@ -165,22 +165,5 @@ renderAdminSidebar($currentAdminPage);
         </div>
     </main>
 </div>
-
-<script>
-    // Password confirmation validation
-    const newPassword = document.getElementById('new_password');
-    const confirmPassword = document.getElementById('confirm_password');
-
-    function validatePasswords() {
-        if (newPassword.value && confirmPassword.value && newPassword.value !== confirmPassword.value) {
-            confirmPassword.setCustomValidity("Passwords do not match");
-        } else {
-            confirmPassword.setCustomValidity("");
-        }
-    }
-
-    newPassword.addEventListener('input', validatePasswords);
-    confirmPassword.addEventListener('input', validatePasswords);
-</script>
 </body>
 </html>

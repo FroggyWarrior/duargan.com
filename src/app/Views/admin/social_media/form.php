@@ -38,7 +38,7 @@ renderAdminSidebar($currentAdminPage);
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
                 <div class="material-form-group with-help">
-                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($platform['name']) : '' ?>" placeholder=" " required oninput="generateSlug(this.value)">
+                    <input type="text" name="name" id="name" class="material-form-input" value="<?= $isEdit ? htmlspecialchars($platform['name']) : '' ?>" placeholder=" " required oninput="AdminUtils.generateSlug(this.value, 'slug')">
                     <label class="material-form-label" for="name">Platform Name *</label>
                 </div>
                 <p class="form-help">e.g., YouTube, Instagram, Discord</p>
@@ -63,7 +63,7 @@ renderAdminSidebar($currentAdminPage);
 
                 <div class="form-section">
                     <h3>SVG Icon *</h3>
-                    <textarea name="icon_svg" id="icon_svg" class="form-textarea" rows="8" placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">...' required oninput="updateSvgPreview()"><?= $isEdit ? htmlspecialchars($platform['icon_svg']) : '' ?></textarea>
+                    <textarea name="icon_svg" id="icon_svg" class="form-textarea" rows="8" placeholder='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">...' required oninput="AdminUtils.updateSvgPreview('icon_svg', 'svgPreview')"><?= $isEdit ? htmlspecialchars($platform['icon_svg']) : '' ?></textarea>
                     <div class="svg-preview" id="svgPreview">
                         <?= $isEdit ? $platform['icon_svg'] : '<span class="material-icons">image</span>' ?>
                     </div>
@@ -81,24 +81,5 @@ renderAdminSidebar($currentAdminPage);
         </div>
     </main>
 </div>
-<script>
-function generateSlug(name) {
-    let slugInput = document.getElementById('slug');
-    if (slugInput.value === '' || slugInput.value === '<?= $isEdit ? $platform['slug'] : '' ?>') {
-        let slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-        slugInput.value = slug;
-    }
-}
-function updateSvgPreview() {
-    let svgCode = document.getElementById('icon_svg').value;
-    let previewDiv = document.getElementById('svgPreview');
-    if (svgCode.trim()) {
-        previewDiv.innerHTML = svgCode;
-    } else {
-        previewDiv.innerHTML = '<span class="material-icons">image</span>';
-    }
-}
-document.addEventListener('DOMContentLoaded', updateSvgPreview);
-</script>
 </body>
 </html>

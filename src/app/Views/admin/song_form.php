@@ -61,14 +61,14 @@ renderAdminSidebar($currentAdminPage);
                 <!-- Cover Image Upload -->
                 <div class="file-upload-group">
                     <button type="button" class="file-upload-btn" onclick="document.getElementById('cover_image').click()" aria-label="Upload cover image"><span class="material-icons" aria-hidden="true">upload</span> Upload Cover Image</button>
-                    <input type="file" id="cover_image" name="cover_image" class="file-upload-input" accept="image/*" onchange="updateFileName(this)">
+                    <input type="file" id="cover_image" name="cover_image" class="file-upload-input" accept="image/*">
                     <div id="file_name" class="file-name" aria-live="polite">No file selected</div>
                     <p class="form-help">Upload a cover image file (JPG, PNG, etc.)</p>
                 </div>
 
                 <!-- Cover Image URL -->
                 <div class="material-form-group with-help">
-                    <input type="text" id="cover_image_url" name="cover_image_url" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['cover_image_url'] : ($_SESSION['old_input']['cover_image_url'] ?? '')) ?>" placeholder=" " onchange="updatePreviewFromUrl(this.value)" aria-describedby="url_help">
+                    <input type="text" id="cover_image_url" name="cover_image_url" class="material-form-input" value="<?= htmlspecialchars($isEdit ? $song['cover_image_url'] : ($_SESSION['old_input']['cover_image_url'] ?? '')) ?>" placeholder=" " aria-describedby="url_help">
                     <label class="material-form-label">Or use Image URL</label>
                 </div>
                 <p id="url_help" class="form-help"><?= $isEdit ? 'Leave empty to keep existing cover, or enter a new URL.' : 'Enter a direct URL to the cover image (required if not uploading a file).' ?></p>
@@ -135,7 +135,7 @@ renderAdminSidebar($currentAdminPage);
                                     <div class="platform-form-base-url">Base URL: <?= htmlspecialchars($platform['base_url']) ?></div>
                                     <?php endif; ?>
                                 </div>
-                                <input type="checkbox" id="platform_<?= $platform['id'] ?>" name="platforms[]" value="<?= $platform['id'] ?>" class="platform-form-checkbox" <?= $checked ? 'checked' : '' ?> onchange="togglePlatformUrl(<?= $platform['id'] ?>)">
+                                <input type="checkbox" id="platform_<?= $platform['id'] ?>" name="platforms[]" value="<?= $platform['id'] ?>" class="platform-form-checkbox" <?= $checked ? 'checked' : '' ?>>
                             </div>
                             <div class="platform-url-group" id="platform_url_<?= $platform['id'] ?>" style="display: <?= $checked ? 'block' : 'none' ?>">
                                 <input type="url" name="platform_urls[<?= $platform['id'] ?>]" class="platform-url-input" placeholder="Enter track URL for <?= htmlspecialchars($platform['name']) ?>" value="<?= htmlspecialchars($url) ?>">
@@ -156,50 +156,5 @@ renderAdminSidebar($currentAdminPage);
         </div>
     </main>
 </div>
-<script>
-    function togglePlatformUrl(platformId) {
-        const cb = document.getElementById('platform_' + platformId);
-        const div = document.getElementById('platform_url_' + platformId);
-        if (cb && div) div.style.display = cb.checked ? 'block' : 'none';
-    }
-    document.querySelectorAll('.platform-form-checkbox').forEach(cb => {
-        const id = cb.value;
-        const div = document.getElementById('platform_url_' + id);
-        if (div && cb.checked) div.style.display = 'block';
-    });
-
-    function updateFileName(input) {
-        const fileName = document.getElementById('file_name');
-        if (input.files.length > 0) {
-            fileName.textContent = 'Selected: ' + input.files[0].name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('cover_preview');
-                if (preview) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-            };
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            fileName.textContent = 'No file selected';
-        }
-    }
-
-    function updatePreviewFromUrl(url) {
-        const preview = document.getElementById('cover_preview');
-        if (preview && url) {
-            preview.src = url;
-            preview.style.display = 'block';
-        } else if (preview && !url) {
-            preview.style.display = 'none';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlInput = document.getElementById('cover_image_url');
-        if (urlInput && urlInput.value) updatePreviewFromUrl(urlInput.value);
-    });
-</script>
 </body>
 </html>

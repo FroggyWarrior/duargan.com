@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/admin.js" defer></script>
 </head>
 <body>
 <div class="admin-login-container">
@@ -48,27 +49,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    // Theme toggle
-    const currentTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-
-    const themeToggle = document.getElementById('themeToggle');
-    const updateIcon = () => {
-        const icon = themeToggle.querySelector('.material-icons');
-        const theme = document.documentElement.getAttribute('data-theme');
-        icon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
-    };
-    updateIcon();
-
-    themeToggle.addEventListener('click', () => {
-        let theme = document.documentElement.getAttribute('data-theme');
-        let next = theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
-        updateIcon();
-    });
-</script>
 </body>
 </html>

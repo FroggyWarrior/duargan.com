@@ -25,7 +25,7 @@ use App\Core\ViewHelper; ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
-    <script src="/js/script.js"></script>
+    <script src="/js/script.js?v=1.0.1"></script>
 </head>
 <body>
     <header>

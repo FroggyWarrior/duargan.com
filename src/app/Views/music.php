@@ -7,7 +7,7 @@
 ?>
 <main class="main-container">
     <section class="music-library">
-        <h1 style="text-align: center;">All My Music</h1>
+        <h1 style="text-align: center; font-size: 2.5rem; margin: 1rem 0;">All My Music</h1>
         <p class="music-subtitle">Explore all my tracks, including free and official releases, remixes, mixes and mash-ups</p>
         
         <!-- Filter Section -->

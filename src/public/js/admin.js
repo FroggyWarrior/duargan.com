@@ -225,7 +225,7 @@
 /**
  * Shared Form Utilities
  */
-var AdminUtils = {
+window.AdminUtils = window.AdminUtils || {
     /**
      * Generates a URL-friendly slug from a name string.
      * @param {string} name - The source text.

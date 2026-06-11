@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
     <script src="/js/admin.js" defer></script>
+    <script src="/js/admin.js?v=1.0.1" defer></script>
 </head>
 <body>
 <?php
